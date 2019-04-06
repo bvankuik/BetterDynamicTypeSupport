@@ -13,16 +13,40 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Search bar screen"
+        self.title = "Views"
         
-        let searchBar = BDTSSearchBar()
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        self.view.addSubview(stackView)
+        
+        let searchBar = UISearchBar()
+        searchBar.text = "UISearchBar"
+        stackView.addArrangedSubview(searchBar)
+        
+        let bdtsSearchBar = BDTSSearchBar()
+        bdtsSearchBar.text = "BDTSSearchBar"
+        stackView.addArrangedSubview(bdtsSearchBar)
+        
+        let button = UIButton()
+        button.setTitle("UIButton", for: .normal)
+        button.backgroundColor = .blue
+        button.setTitleColor(.white, for: .normal)
+        stackView.addArrangedSubview(button)
+
+        let bdtsButton = BDTSButton()
+        bdtsButton.setTitle("BDTSButton", for: .normal)
+        bdtsButton.backgroundColor = .blue
+        bdtsButton.setTitleColor(.white, for: .normal)
+        stackView.addArrangedSubview(bdtsButton)
+        
+        let guide =  self.view.safeAreaLayoutGuide
         let constraints = [
-            searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            stackView.topAnchor.constraint(equalTo: guide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor)
         ]
-        self.view.addSubview(searchBar)
         self.view.addConstraints(constraints)
     }
 }

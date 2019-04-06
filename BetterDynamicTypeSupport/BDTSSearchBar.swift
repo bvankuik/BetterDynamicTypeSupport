@@ -9,7 +9,7 @@ public class BDTSSearchBar: UISearchBar {
     }
     
     public override init(frame: CGRect) {
-        super.init(frame: .zero)
+        super.init(frame: frame)
         self.commonInit()
     }
     
@@ -21,7 +21,7 @@ public class BDTSSearchBar: UISearchBar {
     private func commonInit() {
         let font = UIFont.preferredFont(forTextStyle: self.textStyle)
         let attributes = [NSAttributedString.Key.font: font]
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = attributes
+        UITextField.appearance(whenContainedInInstancesOf: [BDTSSearchBar.self]).defaultTextAttributes = attributes
         NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: nil, queue: .main) { _ in
             self.adjustFontSize()
         }
