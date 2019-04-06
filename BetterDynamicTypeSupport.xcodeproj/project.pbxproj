@@ -20,6 +20,7 @@
 		89A5FC052254C2C4006BC856 /* BDTSExamplesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5FC042254C2C4006BC856 /* BDTSExamplesUITests.swift */; };
 		89A5FC112254C33C006BC856 /* BetterDynamicTypeSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A5FBC22254C157006BC856 /* BetterDynamicTypeSupport.framework */; };
 		89F4295222593A8B00AC8176 /* BDTSButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F4295122593A8B00AC8176 /* BDTSButton.swift */; };
+		89F4295422593EA000AC8176 /* BDTSTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F4295322593EA000AC8176 /* BDTSTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		89A5FC042254C2C4006BC856 /* BDTSExamplesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSExamplesUITests.swift; sourceTree = "<group>"; };
 		89A5FC062254C2C4006BC856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F4295122593A8B00AC8176 /* BDTSButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSButton.swift; sourceTree = "<group>"; };
+		89F4295322593EA000AC8176 /* BDTSTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				89A5FBC62254C157006BC856 /* Info.plist */,
 				89A5FBDC2254C1E0006BC856 /* BDTSSearchBar.swift */,
 				89F4295122593A8B00AC8176 /* BDTSButton.swift */,
+				89F4295322593EA000AC8176 /* BDTSTextField.swift */,
 			);
 			path = BetterDynamicTypeSupport;
 			sourceTree = "<group>";
@@ -397,6 +400,7 @@
 			files = (
 				89F4295222593A8B00AC8176 /* BDTSButton.swift in Sources */,
 				89A5FBDD2254C1E0006BC856 /* BDTSSearchBar.swift in Sources */,
+				89F4295422593EA000AC8176 /* BDTSTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

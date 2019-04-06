@@ -41,6 +41,14 @@ class ViewController: UIViewController {
         bdtsButton.setTitleColor(.white, for: .normal)
         stackView.addArrangedSubview(bdtsButton)
         
+        let textField = UITextField()
+        textField.placeholder = "UITextField"
+        stackView.addArrangedSubview(textField)
+    
+        let bdtsTextField = BDTSTextField()
+        bdtsTextField.placeholder = "BDTSTextField"
+        stackView.addArrangedSubview(bdtsTextField)
+        
         let guide =  self.view.safeAreaLayoutGuide
         let constraints = [
             stackView.topAnchor.constraint(equalTo: guide.topAnchor),
