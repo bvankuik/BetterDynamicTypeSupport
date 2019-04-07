@@ -10,10 +10,9 @@ import UIKit
 
 open class BDTSStepper: UIControl {
     private static let defaultTint = UIColor(red: 0.192, green: 0.478, blue: 0.965, alpha: 1)
+    
     private let foregroundColor = BDTSStepper.defaultTint
-    private let disabledColor = UIColor(red: 0.545, green: 0.733, blue: 0.976, alpha: 1)
     private var constraintsInstalled = false
-    private let buttonPressedColor = UIColor(red: 0.863, green: 0.922, blue: 0.922, alpha: 1)
     private let minus = PlusMinusControl(foregroundColor: BDTSStepper.defaultTint, direction: -1)
     private let plus = PlusMinusControl(foregroundColor: BDTSStepper.defaultTint, direction: 1)
 
@@ -23,13 +22,31 @@ open class BDTSStepper: UIControl {
         }
     }
     var stepValue: Double = 1.0
+    var minimumValue: Double = 0.0
+    var maximumValue: Double = 100.0
     
     @objc func decrement() {
-        self.value -= stepValue
+        if self.value > self.minimumValue {
+            self.value -= self.stepValue
+        }
+
+        self.refreshView()
     }
 
     @objc func increment() {
-        self.value += stepValue
+        if self.value < self.maximumValue {
+            self.value += self.stepValue
+        }
+        
+        self.refreshView()
+    }
+    
+    private func refreshView() {
+        self.minus.isEnabled = (self.value > self.minimumValue)
+        self.plus.isEnabled = (self.value < self.maximumValue)
+        
+        self.minus.alpha = self.minus.isEnabled ? 1.0 : 0.598
+        self.plus.alpha = self.plus.isEnabled ? 1.0 : 0.598
     }
     
     private func refreshHandlers() {
@@ -55,7 +72,7 @@ open class BDTSStepper: UIControl {
     private func commonInit() {
         self.layer.borderWidth = 1
         self.layer.borderColor = self.foregroundColor.cgColor
-        self.layer.cornerRadius = 3
+        self.layer.cornerRadius = 4
         
         let divider = UIView()
         divider.translatesAutoresizingMaskIntoConstraints = false
@@ -86,5 +103,6 @@ open class BDTSStepper: UIControl {
         self.addConstraints(constraints)
         
         self.refreshHandlers()
+        self.refreshView()
     }
 }

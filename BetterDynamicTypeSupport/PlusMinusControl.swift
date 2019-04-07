@@ -16,6 +16,15 @@ class PlusMinusControl: UIControl {
     private let verticalStripe = UIView()
     private let plus = UIView()
     private let label = UILabel()
+    override var isHighlighted: Bool {
+        didSet {
+            if self.isHighlighted {
+                self.backgroundColor = UIColor(red: 0.863, green: 0.922, blue: 0.992, alpha: 1)
+            } else {
+                self.backgroundColor = .clear
+            }
+        }
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
