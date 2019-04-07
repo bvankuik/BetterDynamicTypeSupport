@@ -11,7 +11,7 @@ import UIKit
 class PlusMinusControl: UIControl {
     let foregroundColor: UIColor
     private var constraintsInstalled = false
-    private let step: Int
+    private let direction: Int
     private let horizontalStripe = UIView()
     private let verticalStripe = UIView()
     private let plus = UIView()
@@ -38,7 +38,7 @@ class PlusMinusControl: UIControl {
         ]
         self.addConstraints(constraints)
         
-        if self.step > 0 {
+        if self.direction > 0 {
             let additionalConstraints = [
                 self.verticalStripe.centerXAnchor.constraint(equalTo: self.horizontalStripe.centerXAnchor),
                 self.verticalStripe.centerYAnchor.constraint(equalTo: self.horizontalStripe.centerYAnchor),
@@ -49,9 +49,9 @@ class PlusMinusControl: UIControl {
         }
     }
     
-    init(foregroundColor: UIColor, step: Int){
+    init(foregroundColor: UIColor, direction: Int){
         self.foregroundColor = foregroundColor
-        self.step = step
+        self.direction = direction
         super.init(frame: .zero)
         
         self.label.translatesAutoresizingMaskIntoConstraints = false
@@ -69,14 +69,14 @@ class PlusMinusControl: UIControl {
         self.verticalStripe.translatesAutoresizingMaskIntoConstraints = false
         self.verticalStripe.backgroundColor = self.foregroundColor
         
-        if self.step > 0 {
+        if self.direction > 0 {
             self.addSubview(self.verticalStripe)
         }
     }
     
     private override init(frame: CGRect) {
         self.foregroundColor = .red
-        self.step = 0
+        self.direction = 0
         super.init(frame: frame)
     }
     

@@ -8,10 +8,35 @@
 
 import UIKit
 
-open class BDTSStepper: UIView {
-    private let foregroundColor: UIColor = .blue
+open class BDTSStepper: UIControl {
+    private static let defaultTint = UIColor(red: 0.192, green: 0.478, blue: 0.965, alpha: 1)
+    private let foregroundColor = BDTSStepper.defaultTint
+    private let disabledColor = UIColor(red: 0.545, green: 0.733, blue: 0.976, alpha: 1)
     private var constraintsInstalled = false
+    private let buttonPressedColor = UIColor(red: 0.863, green: 0.922, blue: 0.922, alpha: 1)
+    private let minus = PlusMinusControl(foregroundColor: BDTSStepper.defaultTint, direction: -1)
+    private let plus = PlusMinusControl(foregroundColor: BDTSStepper.defaultTint, direction: 1)
 
+    public var value: Double = 0.0 {
+        didSet {
+            self.sendActions(for: .valueChanged)
+        }
+    }
+    var stepValue: Double = 1.0
+    
+    @objc func decrement() {
+        self.value -= stepValue
+    }
+
+    @objc func increment() {
+        self.value += stepValue
+    }
+    
+    private func refreshHandlers() {
+        minus.addTarget(self, action: #selector(decrement), for: .touchUpInside)
+        plus.addTarget(self, action: #selector(increment), for: .touchUpInside)
+    }
+    
     public init() {
         super.init(frame: .zero)
         self.commonInit()
@@ -37,16 +62,14 @@ open class BDTSStepper: UIView {
         divider.backgroundColor = self.foregroundColor
         self.addSubview(divider)
         
-        let minus = PlusMinusControl(foregroundColor: self.foregroundColor, step: -1)
+        
         minus.translatesAutoresizingMaskIntoConstraints = true
         
-        let plus = PlusMinusControl(foregroundColor: self.foregroundColor, step: 1)
         plus.translatesAutoresizingMaskIntoConstraints = true
 
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(stackView)
-        
         
         stackView.addArrangedSubview(minus)
         stackView.addArrangedSubview(divider)
@@ -61,5 +84,7 @@ open class BDTSStepper: UIView {
             divider.widthAnchor.constraint(equalToConstant: 1)
         ]
         self.addConstraints(constraints)
+        
+        self.refreshHandlers()
     }
 }
