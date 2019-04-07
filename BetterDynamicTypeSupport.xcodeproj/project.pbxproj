@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		897F5FD52259EFB0000C1011 /* PlusMinusControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F5FD42259EFB0000C1011 /* PlusMinusControl.swift */; };
 		89A5FBCC2254C158006BC856 /* BetterDynamicTypeSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A5FBC22254C157006BC856 /* BetterDynamicTypeSupport.framework */; };
 		89A5FBD12254C158006BC856 /* BetterDynamicTypeSupportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5FBD02254C158006BC856 /* BetterDynamicTypeSupportTests.swift */; };
 		89A5FBD32254C158006BC856 /* BetterDynamicTypeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 89A5FBC52254C157006BC856 /* BetterDynamicTypeSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -19,8 +20,7 @@
 		89A5FBFA2254C2C4006BC856 /* BDTSExamplesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5FBF92254C2C4006BC856 /* BDTSExamplesTests.swift */; };
 		89A5FC052254C2C4006BC856 /* BDTSExamplesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5FC042254C2C4006BC856 /* BDTSExamplesUITests.swift */; };
 		89A5FC112254C33C006BC856 /* BetterDynamicTypeSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A5FBC22254C157006BC856 /* BetterDynamicTypeSupport.framework */; };
-		89F4295222593A8B00AC8176 /* BDTSButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F4295122593A8B00AC8176 /* BDTSButton.swift */; };
-		89F4295422593EA000AC8176 /* BDTSTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F4295322593EA000AC8176 /* BDTSTextField.swift */; };
+		89F429582259437700AC8176 /* BDTSStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F429572259437700AC8176 /* BDTSStepper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		897F5FD42259EFB0000C1011 /* PlusMinusControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusMinusControl.swift; sourceTree = "<group>"; };
 		89A5FBC22254C157006BC856 /* BetterDynamicTypeSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BetterDynamicTypeSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A5FBC52254C157006BC856 /* BetterDynamicTypeSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BetterDynamicTypeSupport.h; sourceTree = "<group>"; };
 		89A5FBC62254C157006BC856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -68,8 +69,7 @@
 		89A5FC002254C2C4006BC856 /* BDTSExamplesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BDTSExamplesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A5FC042254C2C4006BC856 /* BDTSExamplesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSExamplesUITests.swift; sourceTree = "<group>"; };
 		89A5FC062254C2C4006BC856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		89F4295122593A8B00AC8176 /* BDTSButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSButton.swift; sourceTree = "<group>"; };
-		89F4295322593EA000AC8176 /* BDTSTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSTextField.swift; sourceTree = "<group>"; };
+		89F429572259437700AC8176 /* BDTSStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSStepper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,8 +144,8 @@
 				89A5FBC52254C157006BC856 /* BetterDynamicTypeSupport.h */,
 				89A5FBC62254C157006BC856 /* Info.plist */,
 				89A5FBDC2254C1E0006BC856 /* BDTSSearchBar.swift */,
-				89F4295122593A8B00AC8176 /* BDTSButton.swift */,
-				89F4295322593EA000AC8176 /* BDTSTextField.swift */,
+				89F429572259437700AC8176 /* BDTSStepper.swift */,
+				897F5FD42259EFB0000C1011 /* PlusMinusControl.swift */,
 			);
 			path = BetterDynamicTypeSupport;
 			sourceTree = "<group>";
@@ -398,9 +398,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89F4295222593A8B00AC8176 /* BDTSButton.swift in Sources */,
+				897F5FD52259EFB0000C1011 /* PlusMinusControl.swift in Sources */,
+				89F429582259437700AC8176 /* BDTSStepper.swift in Sources */,
 				89A5FBDD2254C1E0006BC856 /* BDTSSearchBar.swift in Sources */,
-				89F4295422593EA000AC8176 /* BDTSTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

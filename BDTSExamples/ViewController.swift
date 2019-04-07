@@ -10,7 +10,6 @@ import UIKit
 import BetterDynamicTypeSupport
 
 class ViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Views"
@@ -29,31 +28,23 @@ class ViewController: UIViewController {
         bdtsSearchBar.text = "BDTSSearchBar"
         stackView.addArrangedSubview(bdtsSearchBar)
         
-        let button = UIButton()
-        button.setTitle("UIButton", for: .normal)
-        button.backgroundColor = .blue
-        button.setTitleColor(.white, for: .normal)
-        stackView.addArrangedSubview(button)
-
-        let bdtsButton = BDTSButton()
-        bdtsButton.setTitle("BDTSButton", for: .normal)
-        bdtsButton.backgroundColor = .blue
-        bdtsButton.setTitleColor(.white, for: .normal)
-        stackView.addArrangedSubview(bdtsButton)
+        let stepper = UIStepper()
+        stepper.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(stepper)
         
-        let textField = UITextField()
-        textField.placeholder = "UITextField"
-        stackView.addArrangedSubview(textField)
-    
-        let bdtsTextField = BDTSTextField()
-        bdtsTextField.placeholder = "BDTSTextField"
-        stackView.addArrangedSubview(bdtsTextField)
+        let bdtsStepper = BDTSStepper()
+        bdtsStepper.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(bdtsStepper)
         
         let guide =  self.view.safeAreaLayoutGuide
         let constraints = [
             stackView.topAnchor.constraint(equalTo: guide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor)
+            stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
+            stepper.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
+            stepper.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
+            bdtsStepper.topAnchor.constraint(equalTo: stepper.bottomAnchor, constant: 20),
+            bdtsStepper.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
         ]
         self.view.addConstraints(constraints)
     }
