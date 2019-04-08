@@ -21,10 +21,42 @@ open class BDTSStepper: UIControl {
             self.sendActions(for: .valueChanged)
         }
     }
-    var stepValue: Double = 1.0
-    var minimumValue: Double = 0.0
-    var maximumValue: Double = 100.0
-    var autorepeat: Bool = true
+    public var stepValue: Double = 1.0 {
+        didSet {
+            if self.stepValue <= 0 {
+                NSException(name: .invalidArgumentException, reason: "stepValue <= 0", userInfo: nil).raise()
+            }
+        }
+    }
+    public var minimumValue: Double = 0.0 {
+        didSet {
+            if self.minimumValue >= self.maximumValue {
+                NSException(name: .invalidArgumentException, reason: "minimumValue >= maximumValue", userInfo: nil).raise()
+            }
+            if self.minimumValue >= value {
+                self.value = self.minimumValue
+            }
+        }
+    }
+    public var maximumValue: Double = 100.0 {
+        didSet {
+            if self.maximumValue <= self.minimumValue {
+                NSException(name: .invalidArgumentException, reason: "maximumValue <= minimumValue", userInfo: nil).raise()
+            }
+            if self.value >= self.maximumValue {
+                self.value = self.maximumValue
+            }
+        }
+    }
+    public var autorepeat: Bool {
+        get {
+            return self.minus.autorepeat && self.plus.autorepeat
+        }
+        set {
+            self.minus.autorepeat = newValue
+            self.plus.autorepeat = newValue
+        }
+    }
     
     private func decrement() {
         if self.value > self.minimumValue {
@@ -75,13 +107,13 @@ open class BDTSStepper: UIControl {
         divider.backgroundColor = self.foregroundColor
         self.addSubview(divider)
         
-        minus.translatesAutoresizingMaskIntoConstraints = true
-        minus.action = { [weak self] in
+        self.minus.translatesAutoresizingMaskIntoConstraints = true
+        self.minus.action = { [weak self] in
             self?.decrement()
         }
         
-        plus.translatesAutoresizingMaskIntoConstraints = true
-        plus.action = { [weak self] in
+        self.plus.translatesAutoresizingMaskIntoConstraints = true
+        self.plus.action = { [weak self] in
             self?.increment()
         }
 

@@ -19,15 +19,21 @@ class PlusMinusControl: UIControl {
     private var timerFireCounter = 0
     private var timer: Timer?
     var action: (() -> Void)?
+    var autorepeat = true
     
     @objc func touchUp() {
         if self.timerFireCounter == 0 {
             self.action?()
         }
         self.timer?.invalidate()
+        self.timerFireCounter = 0
     }
     
     @objc func touchDown() {
+        guard self.autorepeat else {
+            return
+        }
+        
         let timer = Timer(fire: Date().addingTimeInterval(0.5), interval: 0.5, repeats: true) { _ in
             self.timerFireCounter += 1
             self.action?()
