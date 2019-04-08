@@ -9,13 +9,34 @@
 import UIKit
 
 class PlusMinusControl: UIControl {
-    let foregroundColor: UIColor
-    private var constraintsInstalled = false
+    private let foregroundColor: UIColor
     private let direction: Int
     private let horizontalStripe = UIView()
     private let verticalStripe = UIView()
     private let plus = UIView()
     private let label = UILabel()
+    private var constraintsInstalled = false
+    private var timerFireCounter = 0
+    private var timer: Timer?
+    var action: (() -> Void)?
+    
+    @objc func touchUp() {
+        if self.timerFireCounter == 0 {
+            self.action?()
+        }
+        self.timer?.invalidate()
+    }
+    
+    @objc func touchDown() {
+        let timer = Timer(fire: Date().addingTimeInterval(0.5), interval: 0.5, repeats: true) { _ in
+            self.timerFireCounter += 1
+            self.action?()
+        }
+        RunLoop.current.add(timer, forMode: .common)
+        self.timerFireCounter = 0
+        self.timer = timer
+    }
+    
     override var isHighlighted: Bool {
         didSet {
             if self.isHighlighted {
@@ -58,11 +79,12 @@ class PlusMinusControl: UIControl {
         }
     }
     
-    init(foregroundColor: UIColor, direction: Int){
+    init(foregroundColor: UIColor, direction: Int) {
         self.foregroundColor = foregroundColor
         self.direction = direction
         super.init(frame: .zero)
         
+        // This label is hidden but makes the view expand/contract when the font size changes
         self.label.translatesAutoresizingMaskIntoConstraints = false
         self.label.text = "WW"
         self.label.font = .preferredFont(forTextStyle: .body)
@@ -81,6 +103,9 @@ class PlusMinusControl: UIControl {
         if self.direction > 0 {
             self.addSubview(self.verticalStripe)
         }
+        
+        self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
+        self.addTarget(self, action: #selector(touchDown), for: .touchDown)
     }
     
     private override init(frame: CGRect) {

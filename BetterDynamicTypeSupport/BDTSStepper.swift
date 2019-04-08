@@ -24,8 +24,9 @@ open class BDTSStepper: UIControl {
     var stepValue: Double = 1.0
     var minimumValue: Double = 0.0
     var maximumValue: Double = 100.0
+    var autorepeat: Bool = true
     
-    @objc func decrement() {
+    private func decrement() {
         if self.value > self.minimumValue {
             self.value -= self.stepValue
         }
@@ -33,7 +34,7 @@ open class BDTSStepper: UIControl {
         self.refreshView()
     }
 
-    @objc func increment() {
+    private func increment() {
         if self.value < self.maximumValue {
             self.value += self.stepValue
         }
@@ -47,11 +48,6 @@ open class BDTSStepper: UIControl {
         
         self.minus.alpha = self.minus.isEnabled ? 1.0 : 0.598
         self.plus.alpha = self.plus.isEnabled ? 1.0 : 0.598
-    }
-    
-    private func refreshHandlers() {
-        minus.addTarget(self, action: #selector(decrement), for: .touchUpInside)
-        plus.addTarget(self, action: #selector(increment), for: .touchUpInside)
     }
     
     public init() {
@@ -79,10 +75,15 @@ open class BDTSStepper: UIControl {
         divider.backgroundColor = self.foregroundColor
         self.addSubview(divider)
         
-        
         minus.translatesAutoresizingMaskIntoConstraints = true
+        minus.action = { [weak self] in
+            self?.decrement()
+        }
         
         plus.translatesAutoresizingMaskIntoConstraints = true
+        plus.action = { [weak self] in
+            self?.increment()
+        }
 
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -101,8 +102,6 @@ open class BDTSStepper: UIControl {
             divider.widthAnchor.constraint(equalToConstant: 1)
         ]
         self.addConstraints(constraints)
-        
-        self.refreshHandlers()
         self.refreshView()
     }
 }
