@@ -31,6 +31,14 @@ class PlusMinusControl: UIControl {
         let timer = Timer(fire: Date().addingTimeInterval(0.5), interval: 0.5, repeats: true) { _ in
             self.timerFireCounter += 1
             self.action?()
+            if self.timerFireCounter > 4 {
+                self.timer?.invalidate()
+                let fasterTimer = Timer(fire: Date().addingTimeInterval(0.1), interval: 0.1, repeats: true) { _ in
+                    self.action?()
+                }
+                RunLoop.current.add(fasterTimer, forMode: .common)
+                self.timer = fasterTimer
+            }
         }
         RunLoop.current.add(timer, forMode: .common)
         self.timerFireCounter = 0
@@ -105,6 +113,7 @@ class PlusMinusControl: UIControl {
         }
         
         self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
+        self.addTarget(self, action: #selector(touchUp), for: .touchUpOutside)
         self.addTarget(self, action: #selector(touchDown), for: .touchDown)
     }
     
