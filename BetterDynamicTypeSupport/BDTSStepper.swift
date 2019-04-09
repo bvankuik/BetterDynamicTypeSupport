@@ -135,31 +135,34 @@ open class BDTSStepper: UIControl {
         divider.backgroundColor = self.foregroundColor
         self.addSubview(divider)
         
-        self.minus.translatesAutoresizingMaskIntoConstraints = true
+        self.minus.translatesAutoresizingMaskIntoConstraints = false
         self.minus.action = { [weak self] in
             self?.decrement()
         }
+        self.addSubview(self.minus)
         
-        self.plus.translatesAutoresizingMaskIntoConstraints = true
+        self.plus.translatesAutoresizingMaskIntoConstraints = false
         self.plus.action = { [weak self] in
             self?.increment()
         }
+        self.addSubview(self.plus)
 
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(stackView)
-        
-        stackView.addArrangedSubview(minus)
-        stackView.addArrangedSubview(divider)
-        stackView.addArrangedSubview(plus)
-        
         let constraints = [
-            stackView.topAnchor.constraint(equalTo: self.topAnchor),
-            stackView.leftAnchor.constraint(equalTo: self.leftAnchor),
-            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            stackView.rightAnchor.constraint(equalTo: self.rightAnchor),
+            self.minus.topAnchor.constraint(equalTo: self.topAnchor),
+            self.minus.leftAnchor.constraint(equalTo: self.leftAnchor),
+            self.minus.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            
+            self.plus.topAnchor.constraint(equalTo: self.topAnchor),
+            self.plus.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            self.plus.rightAnchor.constraint(equalTo: self.rightAnchor),
 
-            divider.widthAnchor.constraint(equalToConstant: 1)
+            divider.topAnchor.constraint(equalTo: self.topAnchor),
+            divider.leftAnchor.constraint(equalTo: self.minus.rightAnchor),
+            divider.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            divider.rightAnchor.constraint(equalTo: self.plus.leftAnchor),
+            divider.widthAnchor.constraint(equalToConstant: 1),
+            
+            self.plus.widthAnchor.constraint(equalTo: self.minus.widthAnchor)
         ]
         self.addConstraints(constraints)
         self.refreshView()
