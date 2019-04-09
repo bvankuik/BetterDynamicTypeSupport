@@ -106,11 +106,6 @@ class PlusMinusControl: UIControl {
         self.label.textColor = .blue
         self.label.adjustsFontForContentSizeCategory = true
         self.label.isHidden = true
-//        let priority = UILayoutPriority.defaultHigh + 1
-//        self.setContentCompressionResistancePriority(priority, for: .horizontal)
-//        self.setContentCompressionResistancePriority(priority, for: .vertical)
-//        self.setContentHuggingPriority(priority, for: .horizontal)
-//        self.setContentHuggingPriority(priority, for: .vertical)
 
         self.addSubview(self.label)
         
