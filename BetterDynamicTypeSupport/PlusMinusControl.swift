@@ -78,7 +78,8 @@ class PlusMinusControl: UIControl {
             self.horizontalStripe.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.horizontalStripe.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             self.horizontalStripe.heightAnchor.constraint(equalToConstant: 1.5),
-            self.horizontalStripe.widthAnchor.constraint(equalTo: self.label.widthAnchor, multiplier: 0.48)
+            self.horizontalStripe.widthAnchor.constraint(equalTo: self.label.heightAnchor, multiplier: 0.73)
+            // width should be 41
         ]
         self.addConstraints(constraints)
         
@@ -105,6 +106,12 @@ class PlusMinusControl: UIControl {
         self.label.textColor = .blue
         self.label.adjustsFontForContentSizeCategory = true
         self.label.isHidden = true
+//        let priority = UILayoutPriority.defaultHigh + 1
+//        self.setContentCompressionResistancePriority(priority, for: .horizontal)
+//        self.setContentCompressionResistancePriority(priority, for: .vertical)
+//        self.setContentHuggingPriority(priority, for: .horizontal)
+//        self.setContentHuggingPriority(priority, for: .vertical)
+
         self.addSubview(self.label)
         
         self.horizontalStripe.translatesAutoresizingMaskIntoConstraints = false

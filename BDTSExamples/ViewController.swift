@@ -10,13 +10,7 @@ import UIKit
 import BetterDynamicTypeSupport
 
 class ViewController: UIViewController {
-    private let stepperLabel = UILabel()
     private let bdtsStepperLabel = UILabel()
-
-    
-    @objc func stepperValueChanged(_ sender: UIStepper) {
-        self.stepperLabel.text = "\(sender.value)"
-    }
     
     @objc func bdtsStepperValueChanged(_ sender: BDTSStepper) {
         self.bdtsStepperLabel.text = "\(sender.value)"
@@ -32,45 +26,45 @@ class ViewController: UIViewController {
         stackView.spacing = 20
         self.view.addSubview(stackView)
         
-        let searchBar = UISearchBar()
-        searchBar.text = "UISearchBar"
-        stackView.addArrangedSubview(searchBar)
-        
-        let bdtsSearchBar = BDTSSearchBar()
-        bdtsSearchBar.text = "BDTSSearchBar"
-        stackView.addArrangedSubview(bdtsSearchBar)
-        
-        let stepper = UIStepper()
-        stepper.translatesAutoresizingMaskIntoConstraints = false
-        stepper.addTarget(self, action: #selector(stepperValueChanged(_:)), for: .valueChanged)
-        self.view.addSubview(stepper)
+        let topStackView = UIStackView()
+        topStackView.alignment = .center
+        stackView.addArrangedSubview(topStackView)
         
         let bdtsStepper = BDTSStepper()
         bdtsStepper.translatesAutoresizingMaskIntoConstraints = false
         bdtsStepper.addTarget(self, action: #selector(bdtsStepperValueChanged(_:)), for: .valueChanged)
-        self.view.addSubview(bdtsStepper)
+        topStackView.addArrangedSubview(bdtsStepper)
         
-        stepperLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(stepperLabel)
+        self.bdtsStepperLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.bdtsStepperLabel.adjustsFontForContentSizeCategory = true
+        self.bdtsStepperLabel.font = .preferredFont(forTextStyle: .body)
+        self.bdtsStepperLabel.text = String(describing: bdtsStepper.value)
+        self.bdtsStepperLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        topStackView.addArrangedSubview(self.bdtsStepperLabel)
         
-        bdtsStepperLabel.translatesAutoresizingMaskIntoConstraints = false
-        bdtsStepperLabel.adjustsFontForContentSizeCategory = true
-        bdtsStepperLabel.font = .preferredFont(forTextStyle: .body)
-        self.view.addSubview(bdtsStepperLabel)
+        let startTextField = UITextField()
+        startTextField.font = .preferredFont(forTextStyle: .body)
+        startTextField.adjustsFontForContentSizeCategory = true
+        startTextField.placeholder = "Start value"
+        stackView.addArrangedSubview(startTextField)
+        
+        let stepsizeTextField = UITextField()
+        stepsizeTextField.font = .preferredFont(forTextStyle: .body)
+        stepsizeTextField.adjustsFontForContentSizeCategory = true
+        stepsizeTextField.placeholder = "Step size"
+        stackView.addArrangedSubview(stepsizeTextField)
+        
+        let resetButton = UIButton()
+        resetButton.setTitle("Reconfigure", for: .normal)
+        resetButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
+        resetButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        stackView.addArrangedSubview(resetButton)
         
         let guide =  self.view.safeAreaLayoutGuide
         let constraints = [
             stackView.topAnchor.constraint(equalTo: guide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-            stepper.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
-            stepper.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            stepperLabel.centerYAnchor.constraint(equalTo: stepper.centerYAnchor),
-            stepperLabel.leftAnchor.constraint(equalToSystemSpacingAfter: stepper.rightAnchor, multiplier: 1),
-            bdtsStepper.topAnchor.constraint(equalTo: stepper.bottomAnchor, constant: 20),
-            bdtsStepper.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-            bdtsStepperLabel.centerYAnchor.constraint(equalTo: bdtsStepper.centerYAnchor),
-            bdtsStepperLabel.leftAnchor.constraint(equalToSystemSpacingAfter: bdtsStepper.rightAnchor, multiplier: 1),
         ]
         self.view.addConstraints(constraints)
     }

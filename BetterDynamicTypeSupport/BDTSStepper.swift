@@ -15,9 +15,16 @@ open class BDTSStepper: UIControl {
     private var constraintsInstalled = false
     private let minus = PlusMinusControl(foregroundColor: BDTSStepper.defaultTint, direction: -1)
     private let plus = PlusMinusControl(foregroundColor: BDTSStepper.defaultTint, direction: 1)
+    private var nSteps: Int = 0
+    private var originalValue: Double = 0.0
 
-    public var value: Double = 0.0 {
-        didSet {
+    public var value: Double {
+        get {
+            return self.originalValue + (Double(self.nSteps) * self.stepValue)
+        }
+        set {
+            self.originalValue = newValue
+            self.nSteps = 0
             self.sendActions(for: .valueChanged)
         }
     }
@@ -58,20 +65,41 @@ open class BDTSStepper: UIControl {
         }
     }
     
-    private func decrement() {
-        if self.value > self.minimumValue {
-            self.value -= self.stepValue
+    private func nextValueForNSteps(_ nSteps: Int, direction: Int) -> Double {
+        let nextValue: Double
+        if direction > 0 {
+            nextValue = self.originalValue + (Double(self.nSteps + 1) * self.stepValue)
+        } else if direction < 0 {
+            nextValue = self.originalValue + (Double(self.nSteps - 1) * self.stepValue)
+        } else {
+            fatalError("Programmer error")
         }
-
-        self.refreshView()
+        
+        return nextValue
+    }
+    
+    private func decrement() {
+        let nextValue = self.nextValueForNSteps(self.nSteps - 1, direction: -1)
+        
+        if nextValue < self.minimumValue {
+            self.refreshView()
+        } else {
+            self.nSteps -= 1
+            self.sendActions(for: .valueChanged)
+            self.refreshView()
+        }
     }
 
     private func increment() {
-        if self.value < self.maximumValue {
-            self.value += self.stepValue
-        }
+        let nextValue = self.nextValueForNSteps(self.nSteps + 1, direction: 1)
         
-        self.refreshView()
+        if nextValue > self.maximumValue {
+            self.refreshView()
+        } else {
+            self.nSteps += 1
+            self.sendActions(for: .valueChanged)
+            self.refreshView()
+        }
     }
     
     private func refreshView() {

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BetterDynamicTypeSupport/BDTSStepper.swift"
-            timestampString = "576399737.056694"
+            timestampString = "576486825.8305629"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "autorepeat"
             landmarkType = "24">
          </BreakpointContent>
