@@ -18,9 +18,14 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         month = "M",
         day = "d"
     }
-    enum Mode {
+    public enum Mode {
         case date
         case dateAndTime
+    }
+    public var mode: Mode = .date {
+        didSet {
+            self.setDate(self.date)
+        }
     }
 
     // MARK: -
@@ -49,6 +54,10 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             self.calendar.locale = self.locale
         }
     }
+    private lazy var sizeForDigit: CGSize = {
+        let size = self.sizeForDynamicTypeLabelWithText("9")
+        return size
+    }()
     
     /// The current date value of the date picker.
     
@@ -56,11 +65,12 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     // MARK: -
     // MARK: Private Variables
     
-    private let maximumNumberOfRows = Int(INT16_MAX)
+    private let maximumNumberOfRows = Int(Int16.max)
     
     /// The internal picker view used for laying out the date components.
     private let pickerView = UIPickerView()
     private let labelForSizeMeasurement = UILabel()
+    private let dateAndTimeModeCounter = 0
     
     /// The calendar used for formatting dates.
     
@@ -85,11 +95,27 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
+    private lazy var dateFormatterForDateMode: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = self.calendar
+        dateFormatter.locale = self.locale
+        
+        return dateFormatter
+    }()
+
+    private lazy var dateFormatterForDateAndTimeMode: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = self.calendar
+        dateFormatter.locale = self.locale
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+        return dateFormatter
+    }()
+
     /// The order in which each component should be ordered in.
     private var datePickerComponentOrdering = [Components]()
     
-    // MARK: -
-    // MARK: LifeCycle
+    // MARK: - LifeCycle
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -101,9 +127,6 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         self.commonInit()
     }
     
-    /**
-     Handles the common initialization amongst all init()
-     */
     func commonInit() {
         self.pickerView.dataSource = self
         self.pickerView.delegate = self
@@ -118,8 +141,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         self.addConstraints([topConstraint, bottomConstraint, leftConstraint, rightConstraint])
     }
     
-    // MARK: -
-    // MARK: Override
+    // MARK: - Override
     public override var intrinsicContentSize : CGSize {
         return self.pickerView.intrinsicContentSize
     }
@@ -127,27 +149,15 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     public override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         self.reloadAllComponents()
-        
-        self.setDate(self.date)
     }
     
-    // MARK: -
-    // MARK: Public
+    // MARK: - Public
     
-    /**
-     Reloads all of the components in the date picker.
-     */
     public func reloadAllComponents() {
         self.refreshComponentOrdering()
         self.pickerView.reloadAllComponents()
     }
     
-    /**
-     Sets the current date value for the date picker.
-     
-     :param: date     The date to set the picker to.
-     :param: animated True if the date picker should changed with an animation; otherwise false,
-     */
     public func setDate(_ date : Date, animated : Bool) {
         self.date = date
         self.updatePickerViewComponentValuesAnimated(animated)
@@ -155,6 +165,11 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     
     // MARK: -
     // MARK: Private
+    
+    private func sizeForNumericLabel(nDigits: Int) -> CGSize {
+        let size = self.sizeForDigit
+        return CGSize(width: size.width * CGFloat(nDigits), height: size.height * CGFloat(nDigits))
+    }
     
     private func sizeForDynamicTypeLabelWithText(_ text: String) -> CGSize {
         self.labelForSizeMeasurement.text = text
@@ -174,22 +189,6 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         self.setDate(date, animated: false)
     }
     
-    /**
-     Creates a new date formatter with the locale and calendar
-     
-     :returns: A new instance of NSDateFormatter
-     */
-    private func dateFormatter() -> DateFormatter {
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = self.calendar
-        dateFormatter.locale = self.locale
-        
-        return dateFormatter
-    }
-    
-    /**
-     Refreshes the ordering of components based on the current locale. Calling this function will not refresh the picker view.
-     */
     private func refreshComponentOrdering() {
         guard var componentOrdering = DateFormatter.dateFormat(fromTemplate: "yMMMMd", options: 0, locale: self.locale) else {
             return
@@ -233,25 +232,38 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
      :returns: A string containing the value of the current row at the component index.
      */
     private func titleForRow(_ row : Int, inComponentIndex componentIndex: Int) -> String {
-        let dateComponent = self.componentAtIndex(componentIndex)
-        
-        let value = self.rawValueForRow(row, inComponent: dateComponent)
-        
-        if dateComponent == Components.month {
-            let dateFormatter = self.dateFormatter()
-            return dateFormatter.monthSymbols[value - 1]
-        } else {
-            return String(value)
+        switch self.mode {
+        case .date:
+            let dateComponent = self.componentAtIndex(componentIndex)
+            
+            let value = self.rawValueForRow(row, inComponent: dateComponent)
+            
+            if dateComponent == Components.month {
+                let dateFormatter = self.dateFormatterForDateMode
+                return dateFormatter.monthSymbols[value - 1]
+            } else {
+                return String(value)
+            }
+        case .dateAndTime:
+            if componentIndex == 0 {
+                let normalizedRow = row - (self.maximumNumberOfRows / 2)
+                if normalizedRow == 0 {
+                    return "Today"
+                } else {
+                    var components = DateComponents()
+                    components.day = normalizedRow
+                    let dateToDisplay = Calendar.current.date(byAdding: components, to: Date()) ?? Date()
+                    let string = self.dateFormatterForDateAndTimeMode.string(from: dateToDisplay)
+                    return string
+                }
+            } else if componentIndex == 1 {
+                return "12"
+            } else {
+                return "00"
+            }
         }
     }
     
-    /**
-     Gets the value of the input component using the current date.
-     
-     :param: component The component whose value is needed.
-     
-     :returns: The value of the component.
-     */
     private func valueForDateComponent(_ component : Components) -> Int{
         if component == .year {
             return self.currentCalendarComponents.year!
@@ -262,13 +274,6 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    /**
-     Gets the maximum range for the specified date picker component.
-     
-     :param: component The component to get the range for.
-     
-     :returns: The maximum date range for that component.
-     */
     private func maximumRangeForComponent(_ component : Components) -> NSRange {
         var calendarUnit : NSCalendar.Unit
         if component == .year {
@@ -282,27 +287,11 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return (self.calendar as NSCalendar).maximumRange(of: calendarUnit)
     }
     
-    /**
-     Calculates the raw value of the row at the current index.
-     
-     :param: row       The row to get.
-     :param: component The component which the row belongs to.
-     
-     :returns: The raw value of the row, in integer. Use NSDateComponents to convert to a usable date object.
-     */
     private func rawValueForRow(_ row : Int, inComponent component : Components) -> Int {
         let calendarUnitRange = self.maximumRangeForComponent(component)
         return calendarUnitRange.location + (row % calendarUnitRange.length)
     }
     
-    /**
-     Checks if the specified row should be enabled or not.
-     
-     :param: row       The row to check.
-     :param: component The component to check the row in.
-     
-     :returns: YES if the row should be enabled; otherwise NO.
-     */
     private func isRowEnabled(_ row: Int, forComponent component : Components) -> Bool {
         
         let rawValue = self.rawValueForRow(row, inComponent: component)
@@ -325,46 +314,28 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return self.dateIsInRange(dateForRow)
     }
     
-    /**
-     Checks if the input date falls within the date picker's minimum and maximum date ranges.
-     
-     :param: date The date to be checked.
-     
-     :returns: True if the input date is within range of the minimum and maximum; otherwise false.
-     */
     private func dateIsInRange(_ date : Date) -> Bool {
         return self.minimumDate.compare(date) != ComparisonResult.orderedDescending &&
             self.maximumDate.compare(date) != ComparisonResult.orderedAscending
     }
     
-    /**
-     Updates all of the date picker components to the value of the current date.
-     
-     :param: animated True if the update should be animated; otherwise false.
-     */
     private func updatePickerViewComponentValuesAnimated(_ animated : Bool) {
-        for (_, dateComponent) in self.datePickerComponentOrdering.enumerated() {
-            self.setIndexOfComponent(dateComponent, animated: animated)
+        switch self.mode {
+        case .date:
+            for (_, dateComponent) in self.datePickerComponentOrdering.enumerated() {
+                self.setIndexOfComponent(dateComponent, animated: animated)
+            }
+        case .dateAndTime:
+            self.pickerView.selectRow((self.maximumNumberOfRows / 2), inComponent: 0, animated: animated)
+            self.pickerView.selectRow(0, inComponent: 1, animated: animated)
+            self.pickerView.selectRow(0, inComponent: 2, animated: animated)
         }
     }
     
-    /**
-     Updates the index of the specified component to its relevant value in the current date.
-     
-     :param: component The component to be updated.
-     :param: animated  True if the update should be animated; otherwise false.
-     */
     private func setIndexOfComponent(_ component : Components, animated: Bool) {
         self.setIndexOfComponent(component, toValue: self.valueForDateComponent(component), animated: animated)
     }
     
-    /**
-     Updates the index of the specified component to the input value.
-     
-     :param: component The component to be updated.
-     :param: value     The value the component should be updated ot.
-     :param: animated  True if the update should be animated; otherwise false.
-     */
     private func setIndexOfComponent(_ component : Components, toValue value : Int, animated: Bool) {
         let componentRange = self.maximumRangeForComponent(component)
         
@@ -382,25 +353,10 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         self.pickerView.selectRow(middleIndex, inComponent: componentIndex, animated: animated)
     }
     
-    /**
-     Gets the component type at the current component index.
-     
-     :param: index The component index
-     
-     :returns: The date picker component type at the index.
-     */
     private func componentAtIndex(_ index: Int) -> Components {
         return self.datePickerComponentOrdering[index]
     }
     
-    /**
-     Gets the number of days of the specified month in the specified year.
-     
-     :param: month The month whose maximum date value is requested.
-     :param: year  The year for which the maximum date value is required.
-     
-     :returns: The number of days in the month.
-     */
     private func numberOfDaysForMonth(_ month : Int, inYear year : Int) -> Int {
         var components = DateComponents()
         components.month = month
@@ -413,14 +369,8 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return numberOfDaysInMonth
     }
     
-    /**
-     Determines if updating the specified component to the input value would evaluate to a valid date using the current date values.
-     
-     :param: value     The value to be updated to.
-     :param: component The component whose value should be updated.
-     
-     :returns: True if updating the component to the specified value would result in a valid date; otherwise false.
-     */
+    // Determines if updating the specified component to the input value would evaluate to a valid date using the
+    // current date values.
     private func isValidValue(_ value : Int, forComponent component: Components) -> Bool {
         if (component == .year) {
             let numberOfDaysInMonth = self.numberOfDaysForMonth(self.currentCalendarComponents.month!, inYear: value)
@@ -436,14 +386,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return true
     }
     
-    /**
-     Creates date components by updating the specified component to the input value. This does not do any date validation.
-     
-     :param: component The component to be updated.
-     :param: value     The value the component should be updated to.
-     
-     :returns: The components by updating the current date's components to the specified value.
-     */
+    // Creates date components by updating the specified component to the input value. Does not do any date validation.
     private func currentCalendarComponentsByUpdatingComponent(_ component : Components, toValue value : Int) -> DateComponents {
         var components = self.currentCalendarComponents
         
@@ -458,14 +401,8 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return components
     }
     
-    /**
-     Creates date components by updating the specified component to the input value. If the resulting value is not a valid date object, the components will be updated to the closest best value.
-     
-     :param: component The component to be updated.
-     :param: value     The value the component should be updated to.
-     
-     :returns: The components by updating the specified value; the components will be a valid date object.
-     */
+    // Creates date components by updating the specified component to the input value. If the resulting value is not
+    // a valid date object, the components will be updated to the closest best value.
     private func validDateValueByUpdatingComponent(_ component : Components, toValue value : Int) -> DateComponents {
         var components = self.currentCalendarComponentsByUpdatingComponent(component, toValue: value)
         if (!self.isValidValue(value, forComponent: component)) {
@@ -481,9 +418,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return components
     }
     
-    // MARK: -
-    // MARK: Protocols
-    // MARK: UIPickerViewDelegate
+    // MARK: - UIPickerViewDelegate
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let datePickerComponent = self.componentAtIndex(component)
@@ -536,31 +471,35 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     }
     
     public func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        let widthBuffer: CGFloat = 25.0
-        
-        let calendarComponent = self.componentAtIndex(component)
-        var size: CGFloat = 0.01
-        
-        if calendarComponent == .month {
-            let dateFormatter = self.dateFormatter()
+        switch self.mode {
+        case .date:
+            let widthBuffer: CGFloat = 25.0
             
-            // Get the length of the longest month string and set the size to it.
-            for symbol in dateFormatter.monthSymbols as [String] {
-                let monthSize = self.sizeForDynamicTypeLabelWithText(symbol)
-                size = max(size, monthSize.width)
+            let calendarComponent = self.componentAtIndex(component)
+            var size: CGFloat = 0.01
+            
+            if calendarComponent == .month {
+                
+                // Get the length of the longest month string and set the size to it.
+                for symbol in self.dateFormatterForDateMode.monthSymbols as [String] {
+                    let monthSize = self.sizeForDynamicTypeLabelWithText(symbol)
+                    size = max(size, monthSize.width)
+                }
+            } else if calendarComponent == .day {
+                size = self.sizeForNumericLabel(nDigits: 2).width
+            } else if calendarComponent == .year {
+                size = self.sizeForNumericLabel(nDigits: 4).width
             }
-        } else if calendarComponent == .day {
-            // Pad the day string to two digits
-
-            let daySize = self.sizeForDynamicTypeLabelWithText("99")
-            size = daySize.width
-        } else if calendarComponent == .year {
-            let yearSize = self.sizeForDynamicTypeLabelWithText("9999")
-            size = yearSize.width
+            
+            // Add the width buffer in order to allow the picker components not to run up against the edges
+            return size + widthBuffer
+        case .dateAndTime:
+            if component == 0 {
+                return self.sizeForDynamicTypeLabelWithText("WWW 99 WWW").width
+            } else {
+                return self.sizeForNumericLabel(nDigits: 2).width
+            }
         }
-        
-        // Add the width buffer in order to allow the picker components not to run up against the edges
-        return size + widthBuffer
     }
     
     public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
@@ -568,7 +507,8 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return size.height
     }
     
-    // MARK: UIPickerViewDataSource
+    // MARK: - UIPickerViewDataSource
+    
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return self.maximumNumberOfRows
     }

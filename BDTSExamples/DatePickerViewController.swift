@@ -23,6 +23,7 @@ class DatePickerViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.datePicker.minimumDate = Date().addingTimeInterval(validPast)
+        self.datePicker.mode = .dateAndTime
         self.datePicker.delegate = self
     }
 }
