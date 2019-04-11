@@ -23,12 +23,8 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     // MARK: Public Properties
     public var delegate: BDTSDatePickerDelegate?
     
-    /// The font for the date picker.
-    
-    public var font = UIFont.systemFont(ofSize: 15.0)
-    /// The text color for the date picker components.
-    
-    public var textColor = UIColor.black
+    private let textStyle: UIFont.TextStyle = .body
+    private var textColor = UIColor.black
     /// The minimum date to show for the date picker. Set to NSDate.distantPast() by default
     public var minimumDate = Date.distantPast {
         didSet {
@@ -515,7 +511,8 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = view as? UILabel == nil ? UILabel() : view as! UILabel
         
-        label.font = self.font
+        label.font = .preferredFont(forTextStyle: self.textStyle)
+        label.adjustsFontForContentSizeCategory = true
         label.textColor = self.textColor
         label.text = self.titleForRow(row, inComponentIndex: component)
         label.textAlignment = self.componentAtIndex(component) == .month ? NSTextAlignment.left : NSTextAlignment.right
@@ -528,7 +525,8 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         let widthBuffer = 25.0
         
         let calendarComponent = self.componentAtIndex(component)
-        let stringSizingAttributes = [NSAttributedString.Key.font : self.font]
+        let font = UIFont.preferredFont(forTextStyle: self.textStyle)
+        let stringSizingAttributes = [NSAttributedString.Key.font : font]
         var size = 0.01
         
         if calendarComponent == .month {
