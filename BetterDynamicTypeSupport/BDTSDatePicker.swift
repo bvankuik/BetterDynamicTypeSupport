@@ -18,6 +18,10 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         month = "M",
         day = "d"
     }
+    enum Mode {
+        case date
+        case dateAndTime
+    }
 
     // MARK: -
     // MARK: Public Properties
@@ -56,6 +60,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     
     /// The internal picker view used for laying out the date components.
     private let pickerView = UIPickerView()
+    private let labelForSizeMeasurement = UILabel()
     
     /// The calendar used for formatting dates.
     
@@ -152,12 +157,11 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     // MARK: Private
     
     private func sizeForDynamicTypeLabelWithText(_ text: String) -> CGSize {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: self.textStyle)
-        label.adjustsFontForContentSizeCategory = true
+        self.labelForSizeMeasurement.text = text
+        self.labelForSizeMeasurement.font = .preferredFont(forTextStyle: self.textStyle)
+        self.labelForSizeMeasurement.adjustsFontForContentSizeCategory = true
         
-        let size = label.systemLayoutSizeFitting(.zero)
+        let size = self.labelForSizeMeasurement.systemLayoutSizeFitting(.zero)
         return size
     }
     
@@ -535,7 +539,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         let widthBuffer: CGFloat = 25.0
         
         let calendarComponent = self.componentAtIndex(component)
-        var size: CGFloat = 0.01        
+        var size: CGFloat = 0.01
         
         if calendarComponent == .month {
             let dateFormatter = self.dateFormatter()
