@@ -151,6 +151,16 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     // MARK: -
     // MARK: Private
     
+    private func sizeForDynamicTypeLabelWithText(_ text: String) -> CGSize {
+        let label = UILabel()
+        label.text = text
+        label.font = .preferredFont(forTextStyle: self.textStyle)
+        label.adjustsFontForContentSizeCategory = true
+        
+        let size = label.systemLayoutSizeFitting(.zero)
+        return size
+    }
+    
     /**
      Sets the current date with no animation.
      
@@ -522,35 +532,37 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     }
     
     public func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        let widthBuffer = 25.0
+        let widthBuffer: CGFloat = 25.0
         
         let calendarComponent = self.componentAtIndex(component)
-        let font = UIFont.preferredFont(forTextStyle: self.textStyle)
-        let stringSizingAttributes = [NSAttributedString.Key.font : font]
-        var size = 0.01
+        var size: CGFloat = 0.01        
         
         if calendarComponent == .month {
             let dateFormatter = self.dateFormatter()
             
             // Get the length of the longest month string and set the size to it.
             for symbol in dateFormatter.monthSymbols as [String] {
-                let monthSize = NSString(string: symbol).size(withAttributes: stringSizingAttributes)
-                size = max(size, Double(monthSize.width))
+                let monthSize = self.sizeForDynamicTypeLabelWithText(symbol)
+                size = max(size, monthSize.width)
             }
-        } else if calendarComponent == .day{
+        } else if calendarComponent == .day {
             // Pad the day string to two digits
-            let dayComponentSizingString = NSString(string: "00")
-            size = Double(dayComponentSizingString.size(withAttributes: stringSizingAttributes).width)
-        } else if calendarComponent == .year  {
-            // Pad the year string to four digits.
-            let yearComponentSizingString = NSString(string: "00")
-            size = Double(yearComponentSizingString.size(withAttributes: stringSizingAttributes).width)
+
+            let daySize = self.sizeForDynamicTypeLabelWithText("99")
+            size = daySize.width
+        } else if calendarComponent == .year {
+            let yearSize = self.sizeForDynamicTypeLabelWithText("9999")
+            size = yearSize.width
         }
         
         // Add the width buffer in order to allow the picker components not to run up against the edges
-        return CGFloat(size + widthBuffer)
+        return size + widthBuffer
     }
     
+    public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        let size = self.sizeForDynamicTypeLabelWithText("99")
+        return size.height
+    }
     
     // MARK: UIPickerViewDataSource
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
