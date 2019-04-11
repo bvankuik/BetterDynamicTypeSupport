@@ -9,7 +9,7 @@
 import UIKit
 import BetterDynamicTypeSupport
 
-class ViewController: UIViewController {
+class StepperViewController: UIViewController {
     private let bdtsStepper = BDTSStepper()
     private let bdtsStepperLabel = UILabel()
     private let startTextField = UITextField()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dsc-8n-ZQO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bUC-Yv-jt4">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,10 +10,73 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Date Picker View Controller-->
+        <scene sceneID="20M-vX-w6x">
+            <objects>
+                <viewController id="faT-cE-FiH" customClass="DatePickerViewController" customModule="BDTSExamples" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gKK-b7-fjY">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="iTm-1V-EFL">
+                                <rect key="frame" x="0.0" y="108" width="414" height="382.5"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h4G-FP-Cgj" customClass="BDTSDatePicker" customModule="BetterDynamicTypeSupport">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="212"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="212" id="p8b-Kw-2FY"/>
+                                        </constraints>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="2bI-Ga-VXH">
+                                        <rect key="frame" x="0.0" y="272" width="414" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="efM-Lc-fIw">
+                                                <rect key="frame" x="0.0" y="0.0" width="207" height="30"/>
+                                                <state key="normal" title="Random Color"/>
+                                                <connections>
+                                                    <action selector="randomizeColor:" destination="faT-cE-FiH" eventType="touchUpInside" id="lye-XV-kfs"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTh-Wu-Fwk">
+                                                <rect key="frame" x="207" y="0.0" width="207" height="30"/>
+                                                <state key="normal" title="Random Font"/>
+                                                <connections>
+                                                    <action selector="randomizeFont:" destination="faT-cE-FiH" eventType="touchUpInside" id="4q7-Kr-FI6"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="84p-Dp-JKo">
+                                        <rect key="frame" x="0.0" y="362" width="414" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="iTm-1V-EFL" firstAttribute="trailing" secondItem="R1D-WU-3WK" secondAttribute="trailing" id="0TR-5I-SU7"/>
+                            <constraint firstItem="iTm-1V-EFL" firstAttribute="leading" secondItem="R1D-WU-3WK" secondAttribute="leading" id="0le-bs-HjD"/>
+                            <constraint firstItem="iTm-1V-EFL" firstAttribute="top" secondItem="R1D-WU-3WK" secondAttribute="top" constant="20" id="cIP-Dt-1sn"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="R1D-WU-3WK"/>
+                    </view>
+                    <connections>
+                        <outlet property="datePicker" destination="h4G-FP-Cgj" id="e1G-DG-1ed"/>
+                        <outlet property="label" destination="84p-Dp-JKo" id="Khd-FW-jDJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e4z-zy-WcN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2990" y="196"/>
+        </scene>
+        <!--Stepper View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BDTSExamples" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="StepperViewController" customModule="BDTSExamples" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -24,25 +87,69 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="877" y="-536"/>
+            <point key="canvasLocation" x="2991" y="-536"/>
+        </scene>
+        <!--Menu-->
+        <scene sceneID="avt-e3-pla">
+            <objects>
+                <viewController title="Menu" id="2fl-X2-uO7" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cC4-Rx-f66">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="111" translatesAutoresizingMaskIntoConstraints="NO" id="LKP-zI-YRT">
+                                <rect key="frame" x="20" y="108" width="374" height="177"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eMq-Kj-qDp">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="33"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Test stepper"/>
+                                        <connections>
+                                            <segue destination="BYZ-38-t0r" kind="show" id="Rcg-lv-35H"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R2i-0J-xhC">
+                                        <rect key="frame" x="0.0" y="144" width="374" height="33"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Test date picker"/>
+                                        <connections>
+                                            <segue destination="faT-cE-FiH" kind="show" id="G5x-H0-SaO"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="LKP-zI-YRT" firstAttribute="leading" secondItem="v54-um-F3P" secondAttribute="leading" constant="20" id="5Nr-fv-F5z"/>
+                            <constraint firstItem="LKP-zI-YRT" firstAttribute="top" secondItem="v54-um-F3P" secondAttribute="top" constant="20" id="SG0-rr-sBs"/>
+                            <constraint firstItem="v54-um-F3P" firstAttribute="trailing" secondItem="LKP-zI-YRT" secondAttribute="trailing" constant="20" id="p4P-Th-yFO"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="v54-um-F3P"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Menu" id="UGo-un-Occ"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5at-UJ-xoH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1865" y="-536"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="slv-l6-RCk">
+        <scene sceneID="AVc-ne-bMA">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dsc-8n-ZQO" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bUC-Yv-jt4" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zUz-1B-1UY">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="X3F-np-fbE">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="2HB-jb-8g1"/>
+                        <segue destination="2fl-X2-uO7" kind="relationship" relationship="rootViewController" id="1bB-T5-aXz"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0vi-0c-NcK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Oc-Da-VOl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="134.78260869565219" y="-536.38392857142856"/>
+            <point key="canvasLocation" x="947.82608695652186" y="-536.38392857142856"/>
         </scene>
     </scenes>
 </document>
