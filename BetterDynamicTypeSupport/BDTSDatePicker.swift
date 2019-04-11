@@ -58,6 +58,11 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         let size = self.sizeForDynamicTypeLabelWithText("9")
         return size
     }()
+    private var hasAMPM: Bool {
+        let formatString: String = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: Locale.current)!
+        return formatString.contains("a")
+    }
+
     
     /// The current date value of the date picker.
     
@@ -95,7 +100,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    private lazy var dateFormatterForDateMode: DateFormatter = {
+    private lazy var formatterForDateMode: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = self.calendar
         dateFormatter.locale = self.locale
@@ -103,12 +108,11 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return dateFormatter
     }()
 
-    private lazy var dateFormatterForDateAndTimeMode: DateFormatter = {
+    private lazy var formatterForDateAndTimeMode: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = self.calendar
         dateFormatter.locale = self.locale
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
+        dateFormatter.dateFormat = "E MMM d"
         return dateFormatter
     }()
 
@@ -180,11 +184,6 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         return size
     }
     
-    /**
-     Sets the current date with no animation.
-     
-     :param: date The date to be set.
-     */
     private func setDate(_ date : Date) {
         self.setDate(date, animated: false)
     }
@@ -213,9 +212,6 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         self.datePickerComponentOrdering = [firstComponent, secondComponent, lastComponent]
     }
     
-    /**
-     Validates that the set minimum and maximum dates are valid.
-     */
     private func validateMinimumAndMaximumDate() {
         let ordering = self.minimumDate.compare(self.maximumDate)
         if (ordering != .orderedAscending ){
@@ -223,14 +219,6 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    /**
-     Gets the value of the current component at the specified row.
-     
-     :param: row            The row index whose value is required
-     :param: componentIndex The component index for the row.
-     
-     :returns: A string containing the value of the current row at the component index.
-     */
     private func titleForRow(_ row : Int, inComponentIndex componentIndex: Int) -> String {
         switch self.mode {
         case .date:
@@ -239,7 +227,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             let value = self.rawValueForRow(row, inComponent: dateComponent)
             
             if dateComponent == Components.month {
-                let dateFormatter = self.dateFormatterForDateMode
+                let dateFormatter = self.formatterForDateMode
                 return dateFormatter.monthSymbols[value - 1]
             } else {
                 return String(value)
@@ -253,18 +241,29 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
                     var components = DateComponents()
                     components.day = normalizedRow
                     let dateToDisplay = Calendar.current.date(byAdding: components, to: Date()) ?? Date()
-                    let string = self.dateFormatterForDateAndTimeMode.string(from: dateToDisplay)
+                    let string = self.formatterForDateAndTimeMode.string(from: dateToDisplay)
                     return string
                 }
             } else if componentIndex == 1 {
-                return "12"
+                if self.hasAMPM {
+                    return String(describing: row + 1)
+                } else {
+                    return String(describing: row)
+                }
+            } else if componentIndex == 2 {
+                return String(format: "%02d", row)
+            } else if componentIndex == 3 {
+                let formatter = DateFormatter()
+                formatter.locale = Locale(identifier: "en_US_POSIX")
+                let symbols: [String] = [formatter.amSymbol, formatter.pmSymbol]
+                return symbols[row]
             } else {
-                return "00"
+                fatalError()
             }
         }
     }
     
-    private func valueForDateComponent(_ component : Components) -> Int{
+    private func valueForDateComponent(_ component : Components) -> Int {
         if component == .year {
             return self.currentCalendarComponents.year!
         } else if component == .day {
@@ -293,7 +292,10 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     }
     
     private func isRowEnabled(_ row: Int, forComponent component : Components) -> Bool {
-        
+        guard self.mode == .date else {
+            return true
+        }
+
         let rawValue = self.rawValueForRow(row, inComponent: component)
         
         var components = DateComponents()
@@ -327,8 +329,29 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             }
         case .dateAndTime:
             self.pickerView.selectRow((self.maximumNumberOfRows / 2), inComponent: 0, animated: animated)
-            self.pickerView.selectRow(0, inComponent: 1, animated: animated)
-            self.pickerView.selectRow(0, inComponent: 2, animated: animated)
+            
+            let components = self.calendar.dateComponents([.hour, .minute], from: self.date)
+            
+            if let hour = components.hour {
+                if self.hasAMPM {
+                    if hour == 0 {
+                        self.pickerView.selectRow(11, inComponent: 1, animated: animated)
+                        self.pickerView.selectRow(0, inComponent: 3, animated: animated)
+                    } else if hour > 12 {
+                        self.pickerView.selectRow(hour - 13, inComponent: 1, animated: animated)
+                        self.pickerView.selectRow(1, inComponent: 3, animated: animated)
+                    } else {
+                        self.pickerView.selectRow(hour, inComponent: 1, animated: animated)
+                        self.pickerView.selectRow(0, inComponent: 3, animated: animated)
+                    }
+                } else {
+                    self.pickerView.selectRow(hour, inComponent: 1, animated: animated)
+                }
+            } else {
+                self.pickerView.selectRow(0, inComponent: 1, animated: animated)
+            }
+            
+            self.pickerView.selectRow(components.minute ?? 0, inComponent: 2, animated: animated)
         }
     }
     
@@ -421,40 +444,67 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     // MARK: - UIPickerViewDelegate
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let datePickerComponent = self.componentAtIndex(component)
-        let value = self.rawValueForRow(row, inComponent: datePickerComponent)
-        
-        // Create the newest valid date components.
-        let components = self.validDateValueByUpdatingComponent(datePickerComponent, toValue: value)
-        
-        // If the resulting components are not in the date range ...
-        if (!self.dateIsInRange(self.calendar.date(from: components)!)) {
-            // ... go back to original date
-            self.setDate(self.date, animated: true)
-        } else {
-            // Get the components that would result by just force-updating the current components.
-            let rawComponents = self.currentCalendarComponentsByUpdatingComponent(datePickerComponent, toValue: value)
+        switch self.mode {
+        case .date:
+            let datePickerComponent = self.componentAtIndex(component)
+            let value = self.rawValueForRow(row, inComponent: datePickerComponent)
             
-            let day = components.day!
+            // Create the newest valid date components.
+            let components = self.validDateValueByUpdatingComponent(datePickerComponent, toValue: value)
             
-            if (rawComponents.day != components.day) {
-                // Only animate the change if the day value is not a valid date.
-                self.setIndexOfComponent(.day, toValue: day, animated: self.isValidValue(day, forComponent: .day))
+            // If the resulting components are not in the date range ...
+            if (!self.dateIsInRange(self.calendar.date(from: components)!)) {
+                // ... go back to original date
+                self.setDate(self.date, animated: true)
+            } else {
+                // Get the components that would result by just force-updating the current components.
+                let rawComponents = self.currentCalendarComponentsByUpdatingComponent(datePickerComponent, toValue: value)
+                
+                let day = components.day!
+                
+                if (rawComponents.day != components.day) {
+                    // Only animate the change if the day value is not a valid date.
+                    self.setIndexOfComponent(.day, toValue: day, animated: self.isValidValue(day, forComponent: .day))
+                }
+                
+                if (rawComponents.month != components.month) {
+                    self.setIndexOfComponent(.month, toValue: day, animated: datePickerComponent != .month)
+                }
+                
+                if (rawComponents.year != components.year) {
+                    self.setIndexOfComponent(.year, toValue: day, animated: datePickerComponent != .year)
+                }
+                
+                self.date = self.calendar.date(from: components)!
+                self.sendActions(for: .valueChanged)
             }
             
-            if (rawComponents.month != components.month) {
-                self.setIndexOfComponent(.month, toValue: day, animated: datePickerComponent != .month)
+            self.delegate?.pickerView(self, didSelectRow: row, inComponent: component)
+        case .dateAndTime:
+            var dayComponent = DateComponents()
+            dayComponent.day = self.pickerView.selectedRow(inComponent: 0) - (self.maximumNumberOfRows / 2)
+            
+            guard let calculatedDate = self.calendar.date(byAdding: dayComponent, to: self.date) else {
+                self.date = Date.distantFuture
+                return
             }
             
-            if (rawComponents.year != components.year) {
-                self.setIndexOfComponent(.year, toValue: day, animated: datePickerComponent != .year)
+            var hour = self.pickerView.selectedRow(inComponent: 1)
+            if self.hasAMPM && self.pickerView.selectedRow(inComponent: 3) == 1 {
+                hour += 12
             }
             
-            self.date = self.calendar.date(from: components)!
-            self.sendActions(for: .valueChanged)
+            var timeComponents = DateComponents()
+            timeComponents.hour = hour
+            timeComponents.minute = self.pickerView.selectedRow(inComponent: 2)
+            
+            let startOfDay = self.calendar.startOfDay(for: calculatedDate)
+            if let newDate = self.calendar.date(byAdding: timeComponents, to: startOfDay) {
+                self.date = newDate
+            } else {
+                self.date = Date.distantFuture
+            }
         }
-        
-        self.delegate?.pickerView(self, didSelectRow: row, inComponent: component)
     }
     
     public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
@@ -464,41 +514,55 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         label.adjustsFontForContentSizeCategory = true
         label.textColor = self.textColor
         label.text = self.titleForRow(row, inComponentIndex: component)
-        label.textAlignment = self.componentAtIndex(component) == .month ? NSTextAlignment.left : NSTextAlignment.right
-        label.textColor = self.isRowEnabled(row, forComponent: self.componentAtIndex(component)) ? self.textColor : self.disabledTextColor
+        
+        
+        switch self.mode {
+        case .date:
+            label.textAlignment = self.componentAtIndex(component) == .month ? NSTextAlignment.left : NSTextAlignment.right
+            label.textColor = self.isRowEnabled(row, forComponent: self.componentAtIndex(component)) ? self.textColor : self.disabledTextColor
+        case .dateAndTime:
+            label.textAlignment = NSTextAlignment.right
+        }
         
         return label
     }
     
     public func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        let widthBuffer: CGFloat = 25.0
+        
         switch self.mode {
         case .date:
-            let widthBuffer: CGFloat = 25.0
             
             let calendarComponent = self.componentAtIndex(component)
-            var size: CGFloat = 0.01
+            let size: CGFloat
             
             if calendarComponent == .month {
                 
                 // Get the length of the longest month string and set the size to it.
-                for symbol in self.dateFormatterForDateMode.monthSymbols as [String] {
+                var longest: CGFloat = 0.01
+                for symbol in self.formatterForDateMode.monthSymbols as [String] {
                     let monthSize = self.sizeForDynamicTypeLabelWithText(symbol)
-                    size = max(size, monthSize.width)
+                    longest = max(longest, monthSize.width)
                 }
+                size = longest
             } else if calendarComponent == .day {
                 size = self.sizeForNumericLabel(nDigits: 2).width
             } else if calendarComponent == .year {
                 size = self.sizeForNumericLabel(nDigits: 4).width
+            } else {
+                fatalError()
             }
             
             // Add the width buffer in order to allow the picker components not to run up against the edges
             return size + widthBuffer
         case .dateAndTime:
+            let size: CGFloat
             if component == 0 {
-                return self.sizeForDynamicTypeLabelWithText("WWW 99 WWW").width
+                size = self.sizeForDynamicTypeLabelWithText("WWW WWW 99").width
             } else {
-                return self.sizeForNumericLabel(nDigits: 2).width
+                size = self.sizeForNumericLabel(nDigits: 2).width
             }
+            return size + widthBuffer
         }
     }
     
@@ -510,10 +574,30 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     // MARK: - UIPickerViewDataSource
     
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return self.maximumNumberOfRows
+        switch self.mode {
+        case .dateAndTime:
+            if component == 0 {
+                return self.maximumNumberOfRows
+            } else if component == 1 {
+                return (self.hasAMPM ? 12 : 24)
+            } else if component == 2 {
+                return 60
+            } else if component == 3 {
+                return 2
+            } else {
+                fatalError()
+            }
+        case .date:
+            return self.maximumNumberOfRows
+        }
     }
     
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 3
+        switch self.mode {
+        case .date:
+            return 3
+        case .dateAndTime:
+            return (self.hasAMPM ? 4 : 3)
+        }
     }
 }

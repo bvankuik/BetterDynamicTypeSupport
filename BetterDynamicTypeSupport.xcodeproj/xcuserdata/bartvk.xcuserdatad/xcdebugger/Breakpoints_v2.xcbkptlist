@@ -26,12 +26,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BetterDynamicTypeSupport/BDTSDatePicker.swift"
-            timestampString = "576666586.0806299"
+            timestampString = "576680416.583199"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
-            landmarkName = "setDate(_:animated:)"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
+            landmarkName = "reloadAllComponents()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BetterDynamicTypeSupport/BDTSDatePicker.swift"
+            timestampString = "576680416.583773"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "335"
+            endingLineNumber = "335"
+            landmarkName = "updatePickerViewComponentValuesAnimated(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

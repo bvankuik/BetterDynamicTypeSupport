@@ -18,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="iTm-1V-EFL">
-                                <rect key="frame" x="0.0" y="108" width="414" height="292.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="iTm-1V-EFL">
+                                <rect key="frame" x="0.0" y="108" width="414" height="252.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h4G-FP-Cgj" customClass="BDTSDatePicker" customModule="BetterDynamicTypeSupport">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="212"/>
@@ -29,7 +29,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="84p-Dp-JKo">
-                                        <rect key="frame" x="0.0" y="272" width="414" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="232" width="414" height="20.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -37,7 +37,7 @@
                                 </subviews>
                             </stackView>
                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="TOG-LJ-2sm">
-                                <rect key="frame" x="0.0" y="513" width="414" height="216"/>
+                                <rect key="frame" x="0.0" y="646" width="414" height="216"/>
                                 <date key="date" timeIntervalSinceReferenceDate="576658853.43743896">
                                     <!--2019-04-11 07:00:53 +0000-->
                                 </date>
@@ -47,9 +47,10 @@
                         <constraints>
                             <constraint firstItem="iTm-1V-EFL" firstAttribute="trailing" secondItem="R1D-WU-3WK" secondAttribute="trailing" id="0TR-5I-SU7"/>
                             <constraint firstItem="iTm-1V-EFL" firstAttribute="leading" secondItem="R1D-WU-3WK" secondAttribute="leading" id="0le-bs-HjD"/>
+                            <constraint firstItem="TOG-LJ-2sm" firstAttribute="bottom" secondItem="R1D-WU-3WK" secondAttribute="bottom" id="D0r-e5-LC3"/>
                             <constraint firstItem="iTm-1V-EFL" firstAttribute="top" secondItem="R1D-WU-3WK" secondAttribute="top" constant="20" id="cIP-Dt-1sn"/>
                             <constraint firstItem="TOG-LJ-2sm" firstAttribute="leading" secondItem="R1D-WU-3WK" secondAttribute="leading" id="ets-nZ-W6f"/>
-                            <constraint firstItem="TOG-LJ-2sm" firstAttribute="top" secondItem="iTm-1V-EFL" secondAttribute="bottom" constant="112.5" id="iZ4-W7-wBJ"/>
+                            <constraint firstItem="TOG-LJ-2sm" firstAttribute="centerX" secondItem="gKK-b7-fjY" secondAttribute="centerX" id="iaB-jx-lnX"/>
                             <constraint firstItem="TOG-LJ-2sm" firstAttribute="trailing" secondItem="R1D-WU-3WK" secondAttribute="trailing" id="rJT-R1-1vo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="R1D-WU-3WK"/>
