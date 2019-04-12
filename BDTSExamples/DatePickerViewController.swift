@@ -15,6 +15,13 @@ class DatePickerViewController: UIViewController {
 
     let validPast: TimeInterval = -10000000000
     
+    @objc func datePickerValueChanged() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .long
+        self.label.text = dateFormatter.string(from: self.datePicker.date)
+    }
+    
     override func viewDidLoad() {
         self.navigationItem.title = "Date picker"
     }
@@ -23,16 +30,8 @@ class DatePickerViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.datePicker.minimumDate = Date().addingTimeInterval(validPast)
+        self.datePicker.setDate(Date(), animated: false)
         self.datePicker.mode = .dateAndTime
-        self.datePicker.delegate = self
-    }
-}
-
-extension DatePickerViewController: BDTSDatePickerDelegate {
-    func pickerView(_ pickerView: BDTSDatePicker, didSelectRow row: Int, inComponent component: Int) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .long
-        self.label.text = dateFormatter.string(from: pickerView.date)
+        self.datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
     }
 }
