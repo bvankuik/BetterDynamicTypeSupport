@@ -11,7 +11,7 @@ public protocol BDTSDatePickerDelegate {
     func pickerView(_ pickerView: BDTSDatePicker, didSelectRow row: Int, inComponent component: Int)
 }
 
-public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDelegate {
+public class BDTSDatePicker: UIControl, UIPickerViewDelegate {
     enum Components : Character  {
         case invalid = "!",
         year = "y",
@@ -22,18 +22,28 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         case date
         case dateAndTime
     }
+    
+    public var delegate: BDTSDatePickerDelegate?
     public var mode: Mode = .date {
         didSet {
+            switch self.mode {
+            case .date:
+                self.pickerView.dataSource = self.dateDataSource
+                self.pickerView.delegate = self
+            case .dateAndTime:
+                self.pickerView.dataSource = self.dateAndTimeDataSource
+                self.pickerView.delegate = self
+            }
             self.setDate(self.date)
         }
     }
-
-    // MARK: -
-    // MARK: Public Properties
-    public var delegate: BDTSDatePickerDelegate?
     
     private let textStyle: UIFont.TextStyle = .body
+    private let dateAndTimeDataSource = DateAndTimeDataSource()
+    private let dateDataSource = DateDataSource()
+    
     private var textColor = UIColor.black
+
     /// The minimum date to show for the date picker. Set to NSDate.distantPast() by default
     public var minimumDate = Date.distantPast {
         didSet {
@@ -58,19 +68,17 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         let size = self.sizeForDynamicTypeLabelWithText("9")
         return size
     }()
-    private var hasAMPM: Bool {
+    fileprivate static var hasAMPM: Bool {
         let formatString: String = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: Locale.current)!
         return formatString.contains("a")
     }
-
     
     /// The current date value of the date picker.
     
     public private(set) var date = Date()
-    // MARK: -
-    // MARK: Private Variables
+    private let baseOffsetDate = Date()
     
-    private let maximumNumberOfRows = Int(Int16.max)
+    fileprivate static let maximumNumberOfRows = Int(Int16.max)
     
     /// The internal picker view used for laying out the date components.
     private let pickerView = UIPickerView()
@@ -132,9 +140,6 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func commonInit() {
-        self.pickerView.dataSource = self
-        self.pickerView.delegate = self
-        
         self.addSubview(self.pickerView)
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         let topConstraint = NSLayoutConstraint(item: self.pickerView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0)
@@ -233,7 +238,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
                 return String(value)
             }
         case .dateAndTime:
-            let normalizedRow = row - (self.maximumNumberOfRows / 2)
+            let normalizedRow = row - (BDTSDatePicker.maximumNumberOfRows / 2)
 
             if componentIndex == 0 {
                 if normalizedRow == 0 {
@@ -241,12 +246,12 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
                 } else {
                     var components = DateComponents()
                     components.day = normalizedRow
-                    let dateToDisplay = Calendar.current.date(byAdding: components, to: Date()) ?? Date()
+                    let dateToDisplay = Calendar.current.date(byAdding: components, to: self.baseOffsetDate) ?? Date()
                     let string = self.formatterForDateAndTimeMode.string(from: dateToDisplay)
                     return string
                 }
             } else if componentIndex == 1 {
-                if self.hasAMPM {
+                if BDTSDatePicker.hasAMPM {
                     let (_, hour) = row.quotientAndRemainder(dividingBy: 12)
                     if hour == 0 {
                         return "12"
@@ -336,7 +341,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
                 self.setIndexOfComponent(dateComponent, animated: animated)
             }
         case .dateAndTime:
-            let middleRow = (self.maximumNumberOfRows / 2)
+            let middleRow = (BDTSDatePicker.maximumNumberOfRows / 2)
             let (_, hourRemainder) = middleRow.quotientAndRemainder(dividingBy: 24)
             let hourStartRow = middleRow - hourRemainder
             
@@ -345,7 +350,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             let components = self.calendar.dateComponents([.hour, .minute], from: self.date)
             
             let hour = components.hour ?? 0
-            if self.hasAMPM {
+            if BDTSDatePicker.hasAMPM {
                 if hour == 0 {
                     self.pickerView.selectRow(hourStartRow + 11, inComponent: 1, animated: animated)
                     self.pickerView.selectRow(0, inComponent: 3, animated: animated)
@@ -374,7 +379,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         let componentRange = self.maximumRangeForComponent(component)
         
         let idx = (value - componentRange.location)
-        let middleIndex = (self.maximumNumberOfRows / 2) - (maximumNumberOfRows / 2) % componentRange.length + idx
+        let middleIndex = (BDTSDatePicker.maximumNumberOfRows / 2) - (BDTSDatePicker.maximumNumberOfRows / 2) % componentRange.length + idx
         
         var componentIndex = 0
         
@@ -494,7 +499,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             self.delegate?.pickerView(self, didSelectRow: row, inComponent: component)
         case .dateAndTime:
 
-            if self.hasAMPM {
+            if BDTSDatePicker.hasAMPM {
                 let hourRow = self.pickerView.selectedRow(inComponent: 1)
                 let (_, hour) = hourRow.quotientAndRemainder(dividingBy: 24)
                 if component == 3 {
@@ -521,11 +526,11 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             let minuteRow = self.pickerView.selectedRow(inComponent: 2)
             let (_, minute) = minuteRow.quotientAndRemainder(dividingBy: 60)
 
-            let dayNormalizedRow = self.pickerView.selectedRow(inComponent: 0) - (self.maximumNumberOfRows / 2)
+            let dayNormalizedRow = self.pickerView.selectedRow(inComponent: 0) - (BDTSDatePicker.maximumNumberOfRows / 2)
             var dayComponent = DateComponents()
             dayComponent.day = dayNormalizedRow
             
-            guard let calculatedDate = self.calendar.date(byAdding: dayComponent, to: self.date) else {
+            guard let calculatedDate = self.calendar.date(byAdding: dayComponent, to: self.baseOffsetDate) else {
                 self.date = Date.distantFuture
                 return
             }
@@ -618,10 +623,10 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             if component == 3 {
                 return 2
             } else {
-                return self.maximumNumberOfRows
+                return BDTSDatePicker.maximumNumberOfRows
             }
         case .date:
-            return self.maximumNumberOfRows
+            return BDTSDatePicker.maximumNumberOfRows
         }
     }
     
@@ -630,7 +635,31 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
         case .date:
             return 3
         case .dateAndTime:
-            return (self.hasAMPM ? 4 : 3)
+            return (BDTSDatePicker.hasAMPM ? 4 : 3)
         }
+    }
+}
+
+fileprivate class DateAndTimeDataSource: NSObject, UIPickerViewDataSource {
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if component == 3 {
+            return 2
+        } else {
+            return BDTSDatePicker.maximumNumberOfRows
+        }
+    }
+    
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return (BDTSDatePicker.hasAMPM ? 4 : 3)
+    }
+}
+
+fileprivate class DateDataSource: NSObject, UIPickerViewDataSource {
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return BDTSDatePicker.maximumNumberOfRows
+    }
+    
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 3
     }
 }
