@@ -36,22 +36,12 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="TOG-LJ-2sm">
-                                <rect key="frame" x="0.0" y="646" width="414" height="216"/>
-                                <date key="date" timeIntervalSinceReferenceDate="576658853.43743896">
-                                    <!--2019-04-11 07:00:53 +0000-->
-                                </date>
-                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="iTm-1V-EFL" firstAttribute="trailing" secondItem="R1D-WU-3WK" secondAttribute="trailing" id="0TR-5I-SU7"/>
                             <constraint firstItem="iTm-1V-EFL" firstAttribute="leading" secondItem="R1D-WU-3WK" secondAttribute="leading" id="0le-bs-HjD"/>
-                            <constraint firstItem="TOG-LJ-2sm" firstAttribute="bottom" secondItem="R1D-WU-3WK" secondAttribute="bottom" id="D0r-e5-LC3"/>
                             <constraint firstItem="iTm-1V-EFL" firstAttribute="top" secondItem="R1D-WU-3WK" secondAttribute="top" constant="20" id="cIP-Dt-1sn"/>
-                            <constraint firstItem="TOG-LJ-2sm" firstAttribute="leading" secondItem="R1D-WU-3WK" secondAttribute="leading" id="ets-nZ-W6f"/>
-                            <constraint firstItem="TOG-LJ-2sm" firstAttribute="centerX" secondItem="gKK-b7-fjY" secondAttribute="centerX" id="iaB-jx-lnX"/>
-                            <constraint firstItem="TOG-LJ-2sm" firstAttribute="trailing" secondItem="R1D-WU-3WK" secondAttribute="trailing" id="rJT-R1-1vo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="R1D-WU-3WK"/>
                     </view>
@@ -109,10 +99,18 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="aOo-0C-2t8">
+                                <rect key="frame" x="47" y="646" width="320" height="216"/>
+                                <date key="date" timeIntervalSinceReferenceDate="576748384.65315998">
+                                    <!--2019-04-12 07:53:04 +0000-->
+                                </date>
+                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="LKP-zI-YRT" firstAttribute="leading" secondItem="v54-um-F3P" secondAttribute="leading" constant="20" id="5Nr-fv-F5z"/>
+                            <constraint firstItem="aOo-0C-2t8" firstAttribute="centerX" secondItem="cC4-Rx-f66" secondAttribute="centerX" id="IgD-4t-4K1"/>
+                            <constraint firstItem="aOo-0C-2t8" firstAttribute="bottom" secondItem="v54-um-F3P" secondAttribute="bottom" id="Ppz-91-TaS"/>
                             <constraint firstItem="LKP-zI-YRT" firstAttribute="top" secondItem="v54-um-F3P" secondAttribute="top" constant="20" id="SG0-rr-sBs"/>
                             <constraint firstItem="v54-um-F3P" firstAttribute="trailing" secondItem="LKP-zI-YRT" secondAttribute="trailing" constant="20" id="p4P-Th-yFO"/>
                         </constraints>

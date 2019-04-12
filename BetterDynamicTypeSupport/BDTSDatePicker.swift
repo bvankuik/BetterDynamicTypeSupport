@@ -455,6 +455,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     // MARK: - UIPickerViewDelegate
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print("row=\(row), component=\(component)")
         switch self.mode {
         case .date:
             let datePickerComponent = self.componentAtIndex(component)
@@ -492,22 +493,46 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             
             self.delegate?.pickerView(self, didSelectRow: row, inComponent: component)
         case .dateAndTime:
+
+            if self.hasAMPM {
+                let hourRow = self.pickerView.selectedRow(inComponent: 1)
+                let (_, hour) = hourRow.quotientAndRemainder(dividingBy: 24)
+                if component == 3 {
+                    // User changed the AM/PM component, update the hours component if necessary
+                    if row == 0 && hour >= 12 {
+                        self.pickerView.selectRow(hourRow - 12, inComponent: 1, animated: true)
+                    }
+                    if row == 1 && hour < 12 {
+                        self.pickerView.selectRow(hourRow + 12, inComponent: 1, animated: true)
+                    }
+                } else if component == 1 {
+                    // User changed the hour component, update the AM/PM component if necessary
+                    let ampmRow = self.pickerView.selectedRow(inComponent: 3)
+                    if hour >= 12 && ampmRow == 0 {
+                        self.pickerView.selectRow(1, inComponent: 3, animated: true)
+                    } else if hour < 12 {
+                        self.pickerView.selectRow(0, inComponent: 3, animated: true)
+                    }
+                }
+            }
+
+            let hourRow = self.pickerView.selectedRow(inComponent: 1)
+            let (_, hour) = hourRow.quotientAndRemainder(dividingBy: 24)
+            let minuteRow = self.pickerView.selectedRow(inComponent: 2)
+            let (_, minute) = minuteRow.quotientAndRemainder(dividingBy: 60)
+
+            let dayNormalizedRow = self.pickerView.selectedRow(inComponent: 0) - (self.maximumNumberOfRows / 2)
             var dayComponent = DateComponents()
-            dayComponent.day = self.pickerView.selectedRow(inComponent: 0) - (self.maximumNumberOfRows / 2)
+            dayComponent.day = dayNormalizedRow
             
             guard let calculatedDate = self.calendar.date(byAdding: dayComponent, to: self.date) else {
                 self.date = Date.distantFuture
                 return
             }
             
-            var hour = self.pickerView.selectedRow(inComponent: 1)
-            if self.hasAMPM && self.pickerView.selectedRow(inComponent: 3) == 1 {
-                hour += 12
-            }
-            
             var timeComponents = DateComponents()
             timeComponents.hour = hour
-            timeComponents.minute = self.pickerView.selectedRow(inComponent: 2)
+            timeComponents.minute = minute
             
             let startOfDay = self.calendar.startOfDay(for: calculatedDate)
             if let newDate = self.calendar.date(byAdding: timeComponents, to: startOfDay) {
@@ -515,7 +540,9 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             } else {
                 self.date = Date.distantFuture
             }
+            
             self.sendActions(for: .valueChanged)
+            self.delegate?.pickerView(self, didSelectRow: row, inComponent: component)
         }
     }
     

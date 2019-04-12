@@ -31,7 +31,8 @@ class DatePickerViewController: UIViewController {
 extension DatePickerViewController: BDTSDatePickerDelegate {
     func pickerView(_ pickerView: BDTSDatePicker, didSelectRow row: Int, inComponent component: Int) {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .long
         self.label.text = dateFormatter.string(from: pickerView.date)
     }
 }
