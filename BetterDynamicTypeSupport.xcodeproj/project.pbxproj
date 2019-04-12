@@ -12,6 +12,7 @@
 		897F5FD52259EFB0000C1011 /* PlusMinusControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F5FD42259EFB0000C1011 /* PlusMinusControl.swift */; };
 		8980D8A4225F14080046592D /* BetterDynamicTypeSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A5FBC22254C157006BC856 /* BetterDynamicTypeSupport.framework */; };
 		8980D8A6225F140E0046592D /* BetterDynamicTypeSupport.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 89A5FBC22254C157006BC856 /* BetterDynamicTypeSupport.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8980D8B422605F8A0046592D /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8980D8B322605F8A0046592D /* MenuViewController.swift */; };
 		89A5FBCC2254C158006BC856 /* BetterDynamicTypeSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A5FBC22254C157006BC856 /* BetterDynamicTypeSupport.framework */; };
 		89A5FBD12254C158006BC856 /* BetterDynamicTypeSupportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5FBD02254C158006BC856 /* BetterDynamicTypeSupportTests.swift */; };
 		89A5FBD32254C158006BC856 /* BetterDynamicTypeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 89A5FBC52254C157006BC856 /* BetterDynamicTypeSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -75,6 +76,7 @@
 		895D634E225E206800EE66BB /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		895D6350225E212800EE66BB /* BDTSDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSDatePicker.swift; sourceTree = "<group>"; };
 		897F5FD42259EFB0000C1011 /* PlusMinusControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusMinusControl.swift; sourceTree = "<group>"; };
+		8980D8B322605F8A0046592D /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		89A5FBC22254C157006BC856 /* BetterDynamicTypeSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BetterDynamicTypeSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A5FBC52254C157006BC856 /* BetterDynamicTypeSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BetterDynamicTypeSupport.h; sourceTree = "<group>"; };
 		89A5FBC62254C157006BC856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				89A5FBED2254C2C4006BC856 /* LaunchScreen.storyboard */,
 				89A5FBF02254C2C4006BC856 /* Info.plist */,
 				895D634E225E206800EE66BB /* DatePickerViewController.swift */,
+				8980D8B322605F8A0046592D /* MenuViewController.swift */,
 			);
 			path = BDTSExamples;
 			sourceTree = "<group>";
@@ -450,6 +453,7 @@
 				89A5FBE72254C2C3006BC856 /* StepperViewController.swift in Sources */,
 				89A5FBE52254C2C3006BC856 /* AppDelegate.swift in Sources */,
 				895D634F225E206800EE66BB /* DatePickerViewController.swift in Sources */,
+				8980D8B422605F8A0046592D /* MenuViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

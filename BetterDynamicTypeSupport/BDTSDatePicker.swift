@@ -233,8 +233,9 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
                 return String(value)
             }
         case .dateAndTime:
+            let normalizedRow = row - (self.maximumNumberOfRows / 2)
+
             if componentIndex == 0 {
-                let normalizedRow = row - (self.maximumNumberOfRows / 2)
                 if normalizedRow == 0 {
                     return "Today"
                 } else {
@@ -246,12 +247,19 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
                 }
             } else if componentIndex == 1 {
                 if self.hasAMPM {
-                    return String(describing: row + 1)
+                    let (_, hour) = row.quotientAndRemainder(dividingBy: 12)
+                    if hour == 0 {
+                        return "12"
+                    } else {
+                        return String(describing: hour)
+                    }
                 } else {
-                    return String(describing: row)
+                    let (_, hour) = row.quotientAndRemainder(dividingBy: 24)
+                    return String(describing: hour)
                 }
             } else if componentIndex == 2 {
-                return String(format: "%02d", row)
+                let (_, minute) = row.quotientAndRemainder(dividingBy: 60)
+                return String(format: "%02d", minute)
             } else if componentIndex == 3 {
                 let formatter = DateFormatter()
                 formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -328,30 +336,33 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
                 self.setIndexOfComponent(dateComponent, animated: animated)
             }
         case .dateAndTime:
-            self.pickerView.selectRow((self.maximumNumberOfRows / 2), inComponent: 0, animated: animated)
+            let middleRow = (self.maximumNumberOfRows / 2)
+            let (_, hourRemainder) = middleRow.quotientAndRemainder(dividingBy: 24)
+            let hourStartRow = middleRow - hourRemainder
             
+            self.pickerView.selectRow(middleRow, inComponent: 0, animated: animated)
+
             let components = self.calendar.dateComponents([.hour, .minute], from: self.date)
             
-            if let hour = components.hour {
-                if self.hasAMPM {
-                    if hour == 0 {
-                        self.pickerView.selectRow(11, inComponent: 1, animated: animated)
-                        self.pickerView.selectRow(0, inComponent: 3, animated: animated)
-                    } else if hour > 12 {
-                        self.pickerView.selectRow(hour - 13, inComponent: 1, animated: animated)
-                        self.pickerView.selectRow(1, inComponent: 3, animated: animated)
-                    } else {
-                        self.pickerView.selectRow(hour, inComponent: 1, animated: animated)
-                        self.pickerView.selectRow(0, inComponent: 3, animated: animated)
-                    }
+            let hour = components.hour ?? 0
+            if self.hasAMPM {
+                if hour == 0 {
+                    self.pickerView.selectRow(hourStartRow + 11, inComponent: 1, animated: animated)
+                    self.pickerView.selectRow(0, inComponent: 3, animated: animated)
+                } else if hour > 12 {
+                    self.pickerView.selectRow(hourStartRow + (hour - 13), inComponent: 1, animated: animated)
+                    self.pickerView.selectRow(1, inComponent: 3, animated: animated)
                 } else {
-                    self.pickerView.selectRow(hour, inComponent: 1, animated: animated)
+                    self.pickerView.selectRow(hourStartRow + hour, inComponent: 1, animated: animated)
+                    self.pickerView.selectRow(0, inComponent: 3, animated: animated)
                 }
             } else {
-                self.pickerView.selectRow(0, inComponent: 1, animated: animated)
+                self.pickerView.selectRow(hourStartRow + hour, inComponent: 1, animated: animated)
             }
-            
-            self.pickerView.selectRow(components.minute ?? 0, inComponent: 2, animated: animated)
+
+            let (_, minuteRemainder) = middleRow.quotientAndRemainder(dividingBy: 60)
+            let minuteStartRow = middleRow - minuteRemainder
+            self.pickerView.selectRow(minuteStartRow + (components.minute ?? 0), inComponent: 2, animated: animated)
         }
     }
     
@@ -504,6 +515,7 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
             } else {
                 self.date = Date.distantFuture
             }
+            self.sendActions(for: .valueChanged)
         }
     }
     
@@ -576,16 +588,10 @@ public class BDTSDatePicker: UIControl, UIPickerViewDataSource, UIPickerViewDele
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch self.mode {
         case .dateAndTime:
-            if component == 0 {
-                return self.maximumNumberOfRows
-            } else if component == 1 {
-                return (self.hasAMPM ? 12 : 24)
-            } else if component == 2 {
-                return 60
-            } else if component == 3 {
+            if component == 3 {
                 return 2
             } else {
-                fatalError()
+                return self.maximumNumberOfRows
             }
         case .date:
             return self.maximumNumberOfRows

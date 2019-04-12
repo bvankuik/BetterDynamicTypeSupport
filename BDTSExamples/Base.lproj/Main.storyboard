@@ -83,7 +83,7 @@
         <!--Menu-->
         <scene sceneID="avt-e3-pla">
             <objects>
-                <viewController title="Menu" id="2fl-X2-uO7" sceneMemberID="viewController">
+                <viewController title="Menu" id="2fl-X2-uO7" customClass="MenuViewController" customModule="BDTSExamples" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cC4-Rx-f66">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -96,7 +96,7 @@
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <state key="normal" title="Test stepper"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="show" id="Rcg-lv-35H"/>
+                                            <segue destination="BYZ-38-t0r" kind="show" identifier="Test stepper" id="Rcg-lv-35H"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R2i-0J-xhC">
@@ -104,7 +104,7 @@
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <state key="normal" title="Test date picker"/>
                                         <connections>
-                                            <segue destination="faT-cE-FiH" kind="show" id="G5x-H0-SaO"/>
+                                            <segue destination="faT-cE-FiH" kind="show" identifier="Test date picker" id="G5x-H0-SaO"/>
                                         </connections>
                                     </button>
                                 </subviews>
