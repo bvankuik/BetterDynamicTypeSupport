@@ -45,6 +45,8 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="R1D-WU-3WK"/>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="datePicker" destination="h4G-FP-Cgj" id="e1G-DG-1ed"/>
                         <outlet property="label" destination="84p-Dp-JKo" id="Khd-FW-jDJ"/>
@@ -53,6 +55,34 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e4z-zy-WcN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2990" y="196"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="oFJ-2B-Urj">
+            <objects>
+                <viewController id="Gd1-qM-MQy" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zeA-CA-JN0">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is presented as popover on iPad to test dimming" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8sq-Nd-Tmw">
+                                <rect key="frame" x="20" y="427" width="374" height="42.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="8sq-Nd-Tmw" secondAttribute="trailing" id="0lV-5H-bpE"/>
+                            <constraint firstItem="8sq-Nd-Tmw" firstAttribute="centerY" secondItem="zeA-CA-JN0" secondAttribute="centerY" id="NWv-dY-yaM"/>
+                            <constraint firstItem="8sq-Nd-Tmw" firstAttribute="leading" secondItem="zeA-CA-JN0" secondAttribute="leadingMargin" id="Rc7-h1-lRT"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="PWq-mD-kAO"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="m2P-Sd-VFe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3938" y="-536"/>
         </scene>
         <!--Stepper View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -64,7 +94,17 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="dvZ-1L-6an"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="dvZ-1L-6an">
+                        <barButtonItem key="rightBarButtonItem" title="Show popoover" id="fAV-hb-Gmc">
+                            <connections>
+                                <segue destination="Gd1-qM-MQy" kind="popoverPresentation" popoverAnchorBarButtonItem="fAV-hb-Gmc" id="DRw-Yp-9HR">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

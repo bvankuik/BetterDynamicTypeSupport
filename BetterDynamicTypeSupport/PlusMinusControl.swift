@@ -21,6 +21,18 @@ class PlusMinusControl: UIControl {
     var action: (() -> Void)?
     var autorepeat = true
     
+    open override func tintColorDidChange() {
+        if self.tintAdjustmentMode == .dimmed {
+            self.horizontalStripe.backgroundColor = .lightGray
+            self.verticalStripe.backgroundColor = .lightGray
+            self.layer.borderColor = UIColor.lightGray.cgColor
+        } else {
+            self.horizontalStripe.backgroundColor = self.foregroundColor
+            self.verticalStripe.backgroundColor = self.foregroundColor
+            self.layer.borderColor = self.foregroundColor.cgColor
+        }
+    }
+    
     @objc func touchUp() {
         if self.timerFireCounter == 0 {
             self.action?()
@@ -103,18 +115,15 @@ class PlusMinusControl: UIControl {
         self.label.translatesAutoresizingMaskIntoConstraints = false
         self.label.text = "WW"
         self.label.font = .preferredFont(forTextStyle: .body)
-        self.label.textColor = .blue
         self.label.adjustsFontForContentSizeCategory = true
         self.label.isHidden = true
 
         self.addSubview(self.label)
         
         self.horizontalStripe.translatesAutoresizingMaskIntoConstraints = false
-        self.horizontalStripe.backgroundColor = self.foregroundColor
         self.addSubview(self.horizontalStripe)
         
         self.verticalStripe.translatesAutoresizingMaskIntoConstraints = false
-        self.verticalStripe.backgroundColor = self.foregroundColor
         
         if self.direction > 0 {
             self.addSubview(self.verticalStripe)
@@ -123,6 +132,7 @@ class PlusMinusControl: UIControl {
         self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         self.addTarget(self, action: #selector(touchUp), for: .touchUpOutside)
         self.addTarget(self, action: #selector(touchDown), for: .touchDown)
+        self.tintColorDidChange()
     }
     
     private override init(frame: CGRect) {

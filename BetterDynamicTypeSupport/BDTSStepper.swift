@@ -17,6 +17,17 @@ open class BDTSStepper: UIControl {
     private let plus = PlusMinusControl(foregroundColor: BDTSStepper.defaultTint, direction: 1)
     private var nSteps: Int = 0
     private var originalValue: Double = 0.0
+    private let divider = UIView()
+    
+    open override func tintColorDidChange() {
+        if self.tintAdjustmentMode == .dimmed {
+            self.layer.borderColor = UIColor.lightGray.cgColor
+            self.divider.backgroundColor = .lightGray
+        } else {
+            self.layer.borderColor = self.foregroundColor.cgColor
+            self.divider.backgroundColor = self.foregroundColor
+        }
+    }
 
     public var value: Double {
         get {
@@ -127,13 +138,10 @@ open class BDTSStepper: UIControl {
     
     private func commonInit() {
         self.layer.borderWidth = 1
-        self.layer.borderColor = self.foregroundColor.cgColor
         self.layer.cornerRadius = 4
         
-        let divider = UIView()
-        divider.translatesAutoresizingMaskIntoConstraints = false
-        divider.backgroundColor = self.foregroundColor
-        self.addSubview(divider)
+        self.divider.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.divider)
         
         self.minus.translatesAutoresizingMaskIntoConstraints = false
         self.minus.action = { [weak self] in
@@ -156,15 +164,16 @@ open class BDTSStepper: UIControl {
             self.plus.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             self.plus.rightAnchor.constraint(equalTo: self.rightAnchor),
 
-            divider.topAnchor.constraint(equalTo: self.topAnchor),
-            divider.leftAnchor.constraint(equalTo: self.minus.rightAnchor),
-            divider.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            divider.rightAnchor.constraint(equalTo: self.plus.leftAnchor),
-            divider.widthAnchor.constraint(equalToConstant: 1),
+            self.divider.topAnchor.constraint(equalTo: self.topAnchor),
+            self.divider.leftAnchor.constraint(equalTo: self.minus.rightAnchor),
+            self.divider.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            self.divider.rightAnchor.constraint(equalTo: self.plus.leftAnchor),
+            self.divider.widthAnchor.constraint(equalToConstant: 1),
             
             self.plus.widthAnchor.constraint(equalTo: self.minus.widthAnchor)
         ]
         self.addConstraints(constraints)
         self.refreshView()
+        self.tintColorDidChange()
     }
 }
