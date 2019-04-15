@@ -24,6 +24,11 @@
 		89A5FBEF2254C2C4006BC856 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89A5FBED2254C2C4006BC856 /* LaunchScreen.storyboard */; };
 		89A5FBFA2254C2C4006BC856 /* BDTSExamplesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5FBF92254C2C4006BC856 /* BDTSExamplesTests.swift */; };
 		89A5FC052254C2C4006BC856 /* BDTSExamplesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A5FC042254C2C4006BC856 /* BDTSExamplesUITests.swift */; };
+		89D9838F2264576800B97425 /* DatePickerDataSources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D9838E2264576800B97425 /* DatePickerDataSources.swift */; };
+		89D98391226457B200B97425 /* Locale+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D98390226457B200B97425 /* Locale+Extensions.swift */; };
+		89D983932264586500B97425 /* DatePickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D983922264586500B97425 /* DatePickerViewDelegate.swift */; };
+		89D983952264589A00B97425 /* BaseDatePickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D983942264589A00B97425 /* BaseDatePickerViewDelegate.swift */; };
+		89D98397226458DF00B97425 /* DateAndTimePickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D98396226458DF00B97425 /* DateAndTimePickerViewDelegate.swift */; };
 		89F429582259437700AC8176 /* BDTSStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F429572259437700AC8176 /* BDTSStepper.swift */; };
 /* End PBXBuildFile section */
 
@@ -97,6 +102,11 @@
 		89A5FC002254C2C4006BC856 /* BDTSExamplesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BDTSExamplesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A5FC042254C2C4006BC856 /* BDTSExamplesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSExamplesUITests.swift; sourceTree = "<group>"; };
 		89A5FC062254C2C4006BC856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89D9838E2264576800B97425 /* DatePickerDataSources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerDataSources.swift; sourceTree = "<group>"; };
+		89D98390226457B200B97425 /* Locale+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Locale+Extensions.swift"; sourceTree = "<group>"; };
+		89D983922264586500B97425 /* DatePickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewDelegate.swift; sourceTree = "<group>"; };
+		89D983942264589A00B97425 /* BaseDatePickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDatePickerViewDelegate.swift; sourceTree = "<group>"; };
+		89D98396226458DF00B97425 /* DateAndTimePickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAndTimePickerViewDelegate.swift; sourceTree = "<group>"; };
 		89F429572259437700AC8176 /* BDTSStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BDTSStepper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,6 +185,11 @@
 				89F429572259437700AC8176 /* BDTSStepper.swift */,
 				897F5FD42259EFB0000C1011 /* PlusMinusControl.swift */,
 				895D6350225E212800EE66BB /* BDTSDatePicker.swift */,
+				89D98396226458DF00B97425 /* DateAndTimePickerViewDelegate.swift */,
+				89D983942264589A00B97425 /* BaseDatePickerViewDelegate.swift */,
+				89D9838E2264576800B97425 /* DatePickerDataSources.swift */,
+				89D98390226457B200B97425 /* Locale+Extensions.swift */,
+				89D983922264586500B97425 /* DatePickerViewDelegate.swift */,
 			);
 			path = BetterDynamicTypeSupport;
 			sourceTree = "<group>";
@@ -431,10 +446,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89D983952264589A00B97425 /* BaseDatePickerViewDelegate.swift in Sources */,
+				89D983932264586500B97425 /* DatePickerViewDelegate.swift in Sources */,
+				89D9838F2264576800B97425 /* DatePickerDataSources.swift in Sources */,
+				89D98397226458DF00B97425 /* DateAndTimePickerViewDelegate.swift in Sources */,
 				895D6351225E212800EE66BB /* BDTSDatePicker.swift in Sources */,
 				897F5FD52259EFB0000C1011 /* PlusMinusControl.swift in Sources */,
 				89F429582259437700AC8176 /* BDTSStepper.swift in Sources */,
 				89A5FBDD2254C1E0006BC856 /* BDTSSearchBar.swift in Sources */,
+				89D98391226457B200B97425 /* Locale+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
