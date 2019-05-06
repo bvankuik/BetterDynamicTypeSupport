@@ -137,6 +137,7 @@ open class BDTSStepper: UIControl {
     }
     
     private func commonInit() {
+        self.accessibilityLabel = "Stepper"
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 4
         
@@ -144,12 +145,14 @@ open class BDTSStepper: UIControl {
         self.addSubview(self.divider)
         
         self.minus.translatesAutoresizingMaskIntoConstraints = false
+        self.minus.accessibilityLabel = "Stepper decrement"
         self.minus.action = { [weak self] in
             self?.decrement()
         }
         self.addSubview(self.minus)
         
         self.plus.translatesAutoresizingMaskIntoConstraints = false
+        self.plus.accessibilityLabel = "Stepper increment"
         self.plus.action = { [weak self] in
             self?.increment()
         }

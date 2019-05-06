@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import BetterDynamicTypeSupport
 
 class BDTSExamplesUITests: XCTestCase {
 
@@ -29,6 +30,23 @@ class BDTSExamplesUITests: XCTestCase {
     func testExample() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+    }
+    
+    func testDefaultStepper() {
+        let app = XCUIApplication()
+        app.buttons["Test stepper"].tap()
+        
+        let resultTextField = app.textFields["Result of stepper"]
+        let value: String = resultTextField.value as! String
+        XCTAssert(value == "0.0")
+
+//        let stepperIncrementElement = app/*@START_MENU_TOKEN@*/.otherElements["Stepper increment"]/*[[".otherElements[\"Stepper\"].otherElements[\"Stepper increment\"]",".otherElements[\"Stepper increment\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+//        stepperIncrementElement.tap()
+//        stepperIncrementElement.tap()
+//        stepperIncrementElement.tap()
+//        stepperIncrementElement.tap()
+//        stepperIncrementElement.tap()
+        
     }
 
 }
